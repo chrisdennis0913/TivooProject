@@ -15,11 +15,11 @@ class Output
             /* You can also give the path as C:\\Desktop\\fileWriter.txt */
             br = new BufferedWriter(fw);
             
-            InputParser input = new InputParser();
-            ArrayList<Event> eventList = (ArrayList<Event>) input.getListOfEvents();
+            DukeBasketBallParser input = new DukeBasketBallParser();
+            ArrayList<DukeBasketballEvent> eventList = (ArrayList<DukeBasketballEvent>) input.getListOfEvents();
             Processor process = new Processor();
             
-            ArrayList<Event> keyList1 = (ArrayList<Event>) process.keywordFinder(eventList, "Duke");
+            ArrayList<DukeBasketballEvent> keyList1 = (ArrayList<DukeBasketballEvent>) process.keywordFinder(eventList, "Duke");
             br.write("<html>");
             br.newLine();
             br.write("<body>");
@@ -31,7 +31,7 @@ class Output
             br.newLine();
             
             br.newLine();
-            for(Event e: keyList1){
+            for(DukeBasketballEvent e: keyList1){
                 br.write("<tr>");
                 br.write("<td>"+e.getSubject()+"</td>");
                 br.write("</tr>");
