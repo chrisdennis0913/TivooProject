@@ -4,12 +4,14 @@ import java.util.GregorianCalendar;
 public abstract class Event
 {
     public String mySubject;
+    public GregorianCalendar myStart;
+    public GregorianCalendar myEnd;
+    
+    
     public String getSubject ()
     {
         return mySubject;
     }
-    public GregorianCalendar myStart;
-    public GregorianCalendar myEnd;
     public GregorianCalendar getStartDate ()
     {
         return myStart;
@@ -18,4 +20,8 @@ public abstract class Event
     {
         return myEnd;
     }
+    
+    public abstract String getDetailsHTML();
+    
+    
 }
