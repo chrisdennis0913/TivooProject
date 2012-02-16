@@ -19,7 +19,7 @@ public class Processor {
         ArrayList<DukeBasketballEvent> keyList = new ArrayList<DukeBasketballEvent> ();
         
         for (DukeBasketballEvent e: myEvents){
-            if (e.getSubject().startsWith(keyword)){
+            if (e.getSubject().contains(keyword)){
                 keyList.add(e);
             }
         }
