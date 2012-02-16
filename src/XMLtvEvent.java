@@ -25,4 +25,10 @@ public class XMLtvEvent extends Event
     {
         return mySeason;
     }
+
+	@Override
+	public String getDetailsHTML() {
+		// TODO Add code to output element to HTML
+		return null;
+	}
 }
