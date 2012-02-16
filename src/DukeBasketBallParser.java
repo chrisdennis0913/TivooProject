@@ -22,14 +22,14 @@ import org.xml.sax.SAXException;
 public class DukeBasketBallParser extends InputParser
 {
     private Document doc = null;
-    private List<DukeBasketballEvent> EventList;
+    private List<Event> EventList;
 
     public DukeBasketBallParser ()
     {
         try
         {
             doc = parserXML(new File("DukeBasketBall.xml"));
-            List<DukeBasketballEvent> EventList = new ArrayList<DukeBasketballEvent>();
+            List<Event> EventList = new ArrayList<Event>();
             //visit(doc, 0, EventList);
             NodeList nl = doc.getElementsByTagName("Calendar");
             for(int i=0; i<nl.getLength();i++){
@@ -43,7 +43,7 @@ public class DukeBasketBallParser extends InputParser
         }
     }
     
-    public List<DukeBasketballEvent> getListOfEvents(){
+    public List<Event> getListOfEvents(){
         return EventList;       
     }
     
@@ -52,7 +52,7 @@ public class DukeBasketBallParser extends InputParser
         Stack<Node> stack = new Stack<Node>();
         stack.push(node);
         DukeBasketballEvent event = new DukeBasketballEvent();
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         Calendar startCal = new GregorianCalendar();
         Calendar endCal = new GregorianCalendar();
         Calendar reminderCal = new GregorianCalendar();

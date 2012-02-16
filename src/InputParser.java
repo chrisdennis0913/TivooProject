@@ -1,7 +1,11 @@
+import java.util.List;
 
-public class InputParser
+
+public abstract class InputParser
 {
-    public static class ParserFactory{
+    public abstract List<Event> getListOfEvents();
+	
+	public static class ParserFactory{
         public static InputParser generate(String filename){
             if(filename.equals("DukeBasketBall.xml")) return new DukeBasketBallParser();
 

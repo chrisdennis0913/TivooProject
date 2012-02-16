@@ -1,9 +1,13 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.GregorianCalendar;
 
 
 public class DukeBasketballEvent extends Event
 {
-
+	private static int fileCount = 0;
+	
     public boolean myIsAllDayEvent;
     // deal with all day events
     public String myDescription;
@@ -91,9 +95,34 @@ public class DukeBasketballEvent extends Event
         return myShowTimeAs;
     }
 
-	@Override
-	public String getDetailsHTML() {
+
+
+	public String generateDetailsHTML() {
 		// TODO Add code to output element to HTML
-		return null;
+		String html =  "<html> \n" +
+				"<body> \n" +
+				"<h4>"+mySubject+"</h4>" +
+						"<p>Description: "+myDescription+"</p>" +
+						"<p>Location: "+myLocation+"</p>" +
+						"<p>Priority: "+myPriority+"</p>" +
+						"<p>Privacy: "+myPrivacy+"</p>" +
+						"<p>Sensitivity: "+mySensitivity+"</p>" +
+						"<br /><a href=\"Calendar.html\">Back to Calendar</a>" +
+				"</body>" +
+				"</html>";
+		String filename = "DukeDetail"+fileCount+".html";
+		FileWriter fstream;
+		try {
+			fstream = new FileWriter(filename);
+			fileCount++;
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(html);
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return filename;
+		}
 	}
-}
