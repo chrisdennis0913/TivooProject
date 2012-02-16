@@ -1,25 +1,29 @@
                                                    
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.BufferedWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 class Output
 {
-    public static void main(String args[])
+    public static void createCalendar(String inputFilename)
     {
         BufferedWriter br= null;
         try
         {
-            File file = new File("fileWriter.txt");
+            File file = new File("Calendar.html");
             FileWriter fw = new FileWriter(file);
             /* You can also give the path as C:\\Desktop\\fileWriter.txt */
             br = new BufferedWriter(fw);
-            
-            DukeBasketBallParser input = new DukeBasketBallParser();
-            ArrayList<DukeBasketballEvent> eventList = (ArrayList<DukeBasketballEvent>) input.getListOfEvents();
+            InputParser input = InputParser.ParserFactory.generate(inputFilename);
+
+            List<Event> eventList = input.getListOfEvents();
+            Collections.sort(eventList);
             Processor process = new Processor();
             
-            ArrayList<DukeBasketballEvent> keyList1 = (ArrayList<DukeBasketballEvent>) process.keywordFinder(eventList, "Duke");
+            List<Event> keyList1 = process.keywordFinder(eventList, "Duke");
             br.write("<html>");
             br.newLine();
             br.write("<body>");
@@ -31,10 +35,11 @@ class Output
             br.newLine();
             
             br.newLine();
-            for(DukeBasketballEvent e: keyList1){
+            for(Event e: eventList){
                 br.write("<tr>");
-                br.write("<td>"+e.getSubject()+"</td>");
+                br.write("<td>"+e.getSubject()+ "  <a href=\"" + e.generateDetailsHTML() + "\">Details</a></td>");
                 br.write("</tr>");
+                
             }
             
             br.write("</table>");

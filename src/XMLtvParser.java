@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -22,18 +23,18 @@ import org.xml.sax.SAXException;
 public class XMLtvParser extends InputParser
 {
     private Document doc = null;
-    private List<XMLtvEvent> EventList;
+    private List<Event> EventList;
 
     public XMLtvParser ()
     {
         try
         {
             doc = parserXML(new File("NFL.xml"));
-            List<XMLtvEvent> EventList = new ArrayList<XMLtvEvent>();
+            List<Event> EventList = new ArrayList<Event>();
             //visit(doc, 0, EventList);
-            NodeList nl = doc.getElementsByTagName("Calendar");
+            NodeList nl = doc.getElementsByTagName("row");
             for(int i=0; i<nl.getLength();i++){
-                EventList.add(parseEvent(nl.item(i)));
+                EventList.add(parseEvent(nl.item(i).getFirstChild().getNextSibling()));
             }
             this.EventList = EventList;
         }
@@ -43,16 +44,17 @@ public class XMLtvParser extends InputParser
         }
     }
     
-    public List<XMLtvEvent> getListOfEvents(){
-        return EventList;       
+    public List<Event> getListOfEvents(){
+        Collections.sort(EventList);
+    	return EventList;       
     }
     
     public XMLtvEvent parseEvent(Node node){
-        NamedNodeMap nnm = node.getAttributes();
+        String nnm = node.getNodeValue();
         Stack<Node> stack = new Stack<Node>();
         stack.push(node);
         XMLtvEvent event = new XMLtvEvent();
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
         Calendar startCal = new GregorianCalendar();
         Calendar endCal = new GregorianCalendar();
         
@@ -61,44 +63,60 @@ public class XMLtvParser extends InputParser
             //check if it is one of the categories you want, and populate the corresponding field in event
             String nodeName = current.getNodeName();
             String nodeText = current.getTextContent();
-            if(nodeName.equals("Col1")) //subject
+            
+            if(nodeName.equals("Col1")){ //subject
                 event.mySubject = nodeText;
+                event.myDescription = nodeText;
+            }
             else if (nodeName.equals("Col2")) //description
-            	event.myDescription = nodeText;
+            	event.mySource = nodeText;
             else if (nodeName.equals("Col3")) //season
             	event.mySeason = nodeText;
             else if(nodeName.equals("Col8")){ //start time and date
-                Date date = null;
+                String[] dateTime = nodeText.split("\\s+");
+            	Date date = null;
                 try {
-                    date = df.parse(nodeText);
+                    date = df.parse(dateTime[0]);
                 } catch (ParseException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                }               
-                //startCal.setTime(date);
+                }         
+                
+                
+                String[] hms = dateTime[1].split(":");
+                startCal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(hms[0]));
+                startCal.set(Calendar.MINUTE,Integer.parseInt(hms[1]));
+                startCal.set(Calendar.SECOND, Integer.parseInt(hms[2])); 
+                
                 startCal.set(Calendar.DAY_OF_MONTH, date.getDate());
                 startCal.set(Calendar.MONTH, date.getMonth());
                 startCal.set(Calendar.YEAR, date.getYear());
             }
             else if(nodeName.equals("Col9")){  //end time and date
+                String[] dateTime = nodeText.split("\\s+");
                 Date date = null;
                 try {
                     date = df.parse(nodeText);
                 } catch (ParseException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                }               
-                //endCal.setTime(date);
+                }        
+                
+                String[] hms = dateTime[1].split(":");
+                endCal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(hms[0]));
+                endCal.set(Calendar.MINUTE,Integer.parseInt(hms[1]));
+                endCal.set(Calendar.SECOND, Integer.parseInt(hms[2])); 
+                
                 endCal.set(Calendar.DAY_OF_MONTH, date.getDate());
                 endCal.set(Calendar.MONTH, date.getMonth());
                 endCal.set(Calendar.YEAR, date.getYear());
             }
             else if(nodeName.equals("Col15")) //location
                 event.myLocation = nodeText;
-            NodeList list = current.getChildNodes();
-            for(int i=0;i<list.getLength();i++){
-                stack.push(list.item(i));
-            }  
+            if(current.getNextSibling() != null)
+            	if(current.getNextSibling().getNextSibling() != null)
+            		stack.push(current.getNextSibling().getNextSibling());
+              
         }
         event.myStart = (GregorianCalendar) startCal;
         event.myEnd = (GregorianCalendar) endCal;
