@@ -52,7 +52,7 @@ public class DukeBasketBallParser extends InputParser
         Stack<Node> stack = new Stack<Node>();
         stack.push(node);
         DukeBasketballEvent event = new DukeBasketballEvent();
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         Calendar startCal = new GregorianCalendar();
         Calendar endCal = new GregorianCalendar();
         Calendar reminderCal = new GregorianCalendar();

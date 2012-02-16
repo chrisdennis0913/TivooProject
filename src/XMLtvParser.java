@@ -54,7 +54,7 @@ public class XMLtvParser extends InputParser
         Stack<Node> stack = new Stack<Node>();
         stack.push(node);
         XMLtvEvent event = new XMLtvEvent();
-        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Calendar startCal = new GregorianCalendar();
         Calendar endCal = new GregorianCalendar();
         
@@ -74,23 +74,16 @@ public class XMLtvParser extends InputParser
             	event.mySeason = nodeText;
             else if(nodeName.equals("Col8")){ //start time and date
                 String[] dateTime = nodeText.split("\\s+");
-            	Date date = null;
-                try {
-                    date = df.parse(dateTime[0]);
-                } catch (ParseException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }         
-                
+            	String[] date = dateTime[0].split("-");                
                 
                 String[] hms = dateTime[1].split(":");
                 startCal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(hms[0]));
                 startCal.set(Calendar.MINUTE,Integer.parseInt(hms[1]));
                 startCal.set(Calendar.SECOND, Integer.parseInt(hms[2])); 
                 
-                startCal.set(Calendar.DAY_OF_MONTH, date.getDate());
-                startCal.set(Calendar.MONTH, date.getMonth());
-                startCal.set(Calendar.YEAR, date.getYear());
+                startCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date[2]));
+                startCal.set(Calendar.MONTH, Integer.parseInt(date[1]));
+                startCal.set(Calendar.YEAR, Integer.parseInt(date[0]));
             }
             else if(nodeName.equals("Col9")){  //end time and date
                 String[] dateTime = nodeText.split("\\s+");
