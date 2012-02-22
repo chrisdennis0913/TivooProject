@@ -49,11 +49,11 @@ public class XMLtvParser extends InputParser
     	return EventList;       
     }
     
-    public XMLtvEvent parseEvent(Node node){
+    public Event parseEvent(Node node){
         String nnm = node.getNodeValue();
         Stack<Node> stack = new Stack<Node>();
         stack.push(node);
-        XMLtvEvent event = new XMLtvEvent();
+        Event event = new Event();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Calendar startCal = new GregorianCalendar();
         Calendar endCal = new GregorianCalendar();
@@ -66,14 +66,15 @@ public class XMLtvParser extends InputParser
             
             if(nodeName.equals("Col1")){ //subject
                 event.mySubject = nodeText;
-                event.myDescription = nodeText;
+                event.detailMap.put("Description", nodeText);
             }
             else if (nodeName.equals("Col2")) //description
-            	event.mySource = nodeText;
+            	event.detailMap.put("Source", nodeText);
             else if (nodeName.equals("Col3")) //season
-            	event.mySeason = nodeText;
+            	event.detailMap.put("Season", nodeText);
             else if(nodeName.equals("Col8")){ //start time and date
-                String[] dateTime = nodeText.split("\\s+");
+                
+            	String[] dateTime = nodeText.split("\\s+");
             	String[] date = dateTime[0].split("-");                
                 
                 String[] hms = dateTime[1].split(":");
@@ -105,7 +106,7 @@ public class XMLtvParser extends InputParser
                 endCal.set(Calendar.YEAR, date.getYear());
             }
             else if(nodeName.equals("Col15")) //location
-                event.myLocation = nodeText;
+            	event.detailMap.put("Location", nodeText);
             if(current.getNextSibling() != null)
             	if(current.getNextSibling().getNextSibling() != null)
             		stack.push(current.getNextSibling().getNextSibling());
