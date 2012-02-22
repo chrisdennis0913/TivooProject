@@ -47,15 +47,13 @@ public class DukeBasketBallParser extends InputParser
         return EventList;       
     }
     
-    public DukeBasketballEvent parseEvent(Node node){
-        NamedNodeMap nnm = node.getAttributes();
+    public Event parseEvent(Node node){
         Stack<Node> stack = new Stack<Node>();
         stack.push(node);
-        DukeBasketballEvent event = new DukeBasketballEvent();
+        Event event = new Event();
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         Calendar startCal = new GregorianCalendar();
         Calendar endCal = new GregorianCalendar();
-        Calendar reminderCal = new GregorianCalendar();
         
         while(!stack.isEmpty()){
             Node current = stack.pop();
@@ -104,49 +102,24 @@ public class DukeBasketBallParser extends InputParser
                 String[] secAM_PM = hms[2].split(" ");
                 endCal.set(Calendar.SECOND, Integer.parseInt(secAM_PM[0])); 
             }
-            else if(nodeName.equals("AllDayEvent")){
-                event.myIsAllDayEvent = Boolean.parseBoolean(nodeText);
-            }
-            else if(nodeName.equals("ReminderOnOff"))
-                event.myReminderOnOff = nodeText;
-            else if(nodeName.equals("ReminderDate")){
-                Date date = null;
-                try {
-                    date = df.parse(nodeText);
-                } catch (ParseException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }               
-                //reminderCal.setTime(date);
-                reminderCal.set(Calendar.DAY_OF_MONTH, date.getDate());
-                reminderCal.set(Calendar.MONTH, date.getMonth());
-                reminderCal.set(Calendar.YEAR, date.getYear());
-            }
-            else if(nodeName.equals("ReminderTime")){
-                String[] hms = nodeText.split(":");
-                reminderCal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(hms[0]));
-                reminderCal.set(Calendar.MINUTE,Integer.parseInt(hms[1]));
-                String[] secAM_PM = hms[2].split(" ");
-                reminderCal.set(Calendar.SECOND, Integer.parseInt(secAM_PM[0])); 
-            }
             else if(nodeName.equals("Description"))
-                event.myDescription = nodeText;
+                event.detailMap.put("Description", nodeText);
             else if(nodeName.equals("Location"))
-                event.myLocation = nodeText;
+            	event.detailMap.put("Location", nodeText);
             else if(nodeName.equals("Priority"))
-                event.myPriority = nodeText;
+            	event.detailMap.put("Priority", nodeText);
             else if(nodeName.equals("Private"))
-                event.myPrivacy = nodeText;
+            	event.detailMap.put("Private", nodeText);
             else if(nodeName.equals("Sensitivity"))
-                event.mySensitivity = nodeText;
+            	event.detailMap.put("Sensitivity", nodeText);
             else if(nodeName.equals("Showtimeas"))
-                event.myShowTimeAs = nodeText;
+            	event.detailMap.put("Showtimeas", nodeText);
             NodeList list = current.getChildNodes();
             for(int i=0;i<list.getLength();i++){
                 stack.push(list.item(i));
             }                   
         }   
-        event.myReminder = (GregorianCalendar) reminderCal;
+
         event.myStart = (GregorianCalendar) startCal;
         event.myEnd = (GregorianCalendar) endCal;
         

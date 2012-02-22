@@ -65,7 +65,7 @@ class Output
 				int dayCount =0;
 				for(int j = 0;j<5;j++)
 				{
-					br.write("<tr>");
+					br.write("<tr style=\"height:100px;\">");
 					//determine how many to skip based off of day of week; possibly do another timeframefinder
 					
 					//List<Event> thisWeek =  process.timeFrameFinder(thisMonth,
@@ -93,9 +93,7 @@ class Output
 						}
 						
 						dayCount+=1;
-						
-						br.write("<td>");
-						
+						br.write("<td style=\"width:250px\">");					
 						
 						for(int x = 0;x<thisDay.size();x++)
 						{	

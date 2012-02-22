@@ -1,13 +1,24 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 
-public abstract class Event implements Comparable<Event>
+public class Event implements Comparable<Event>
 {
+	private static int fileCount = 0;
     public String mySubject;
     public GregorianCalendar myStart;
     public GregorianCalendar myEnd;
+    public Map<String, String> detailMap = new HashMap<String, String>();
     
+    public Event(){
+    	
+    }
     
 	public int compareTo(Event other) {
 		
@@ -37,7 +48,36 @@ public abstract class Event implements Comparable<Event>
         return myEnd;
     }
     
-    public abstract String generateDetailsHTML();
+    public String generateDetailsHTML() {
+		// TODO Add code to output element to HTML
+    	StringBuffer html = new StringBuffer();
+		html.append( "<html> \n" +
+				"<body> \n" + 
+				"<h4>"+mySubject+"</h4>");
+				
+		Set<String> detailNames = detailMap.keySet();
+		for(String detailName : detailNames){
+			html.append("<p>"+detailName+": " + detailMap.get(detailName) + "</p>");			
+		}
+					
+		html.append("<br /><a href=\"Calendar.html\">Back to Calendar</a>" +
+				"</body>" +
+				"</html>");
+		String filename = "DukeDetail"+fileCount+".html";
+		FileWriter fstream;
+		try {
+			fstream = new FileWriter(filename);
+			fileCount++;
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(html.toString());
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return filename;
+		}
 
     class MalformedDateException extends Exception {
 		  public MalformedDateException() {
