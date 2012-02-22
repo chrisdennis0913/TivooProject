@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -22,7 +23,6 @@ import org.xml.sax.SAXException;
 public class DukeBasketBallParser extends InputParser
 {
     private Document doc = null;
-    private List<Event> EventList;
 
     public DukeBasketBallParser ()
     {
@@ -43,10 +43,6 @@ public class DukeBasketBallParser extends InputParser
         }
     }
     
-    public List<Event> getListOfEvents(){
-        return EventList;       
-    }
-    
     public Event parseEvent(Node node){
         Stack<Node> stack = new Stack<Node>();
         stack.push(node);
@@ -60,6 +56,7 @@ public class DukeBasketBallParser extends InputParser
             //check if it is one of the categories you want, and populate the corresponding field in event
             String nodeName = current.getNodeName();
             String nodeText = current.getTextContent();
+            
             if(nodeName.equals("Subject"))
                 event.mySubject = nodeText;
             else if(nodeName.equals("StartDate")){
@@ -67,7 +64,6 @@ public class DukeBasketBallParser extends InputParser
                 try {
                     date = df.parse(nodeText);
                 } catch (ParseException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }               
                 //startCal.setTime(date);
@@ -87,7 +83,6 @@ public class DukeBasketBallParser extends InputParser
                 try {
                     date = df.parse(nodeText);
                 } catch (ParseException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }               
                 //endCal.setTime(date);
@@ -126,16 +121,6 @@ public class DukeBasketBallParser extends InputParser
         return event;
             
         
-    }
-
-    public Document parserXML (File file)
-        throws SAXException,
-            IOException,
-            ParserConfigurationException
-    {
-        return DocumentBuilderFactory.newInstance()
-                                     .newDocumentBuilder()
-                                     .parse(file);
     }
 
 }
