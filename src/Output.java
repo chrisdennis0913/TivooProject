@@ -57,7 +57,7 @@ class Output
 	public static String addEvent(String link, String title, List<Event> thisDay, int x)
 	{
 		return "<a href=\""+link+"\">"+title+"</a> "+thisDay.get(x).myStart.get(Calendar.HOUR)+":"+
-					thisDay.get(x).myStart.get(Calendar.MINUTE)+":" +" - "+
+					thisDay.get(x).myStart.get(Calendar.MINUTE) +" - "+
 					thisDay.get(x).myEnd.get(Calendar.HOUR)+":"+thisDay.get(x).myEnd.get(Calendar.MINUTE)+"<br/>";
 	}
 	
