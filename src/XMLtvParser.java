@@ -73,7 +73,8 @@ public class XMLtvParser extends InputParser
             else if (nodeName.equals("Col3")) //season
             	event.mySeason = nodeText;
             else if(nodeName.equals("Col8")){ //start time and date
-                String[] dateTime = nodeText.split("\\s+");
+                
+            	String[] dateTime = nodeText.split("\\s+");
             	String[] date = dateTime[0].split("-");                
                 
                 String[] hms = dateTime[1].split(":");

@@ -39,6 +39,13 @@ public abstract class Event implements Comparable<Event>
     
     public abstract String generateDetailsHTML();
 
-    
+    class MalformedDateException extends Exception {
+		  public MalformedDateException() {
+		  }
+		 
+		  public MalformedDateException(String msg) {
+		    super(msg);
+		  }
+	}
     
 }
