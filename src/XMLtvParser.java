@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
 public class XMLtvParser extends InputParser
 {
     private Document doc = null;
-    private List<Event> EventList;
+
 
     public XMLtvParser ()
     {
@@ -44,13 +44,9 @@ public class XMLtvParser extends InputParser
         }
     }
     
-    public List<Event> getListOfEvents(){
-        Collections.sort(EventList);
-    	return EventList;       
-    }
     
     public Event parseEvent(Node node){
-        String nnm = node.getNodeValue();
+//        String nnm = node.getNodeValue();
         Stack<Node> stack = new Stack<Node>();
         stack.push(node);
         Event event = new Event();
@@ -92,7 +88,6 @@ public class XMLtvParser extends InputParser
                 try {
                     date = df.parse(nodeText);
                 } catch (ParseException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }        
                 
@@ -119,14 +114,6 @@ public class XMLtvParser extends InputParser
         
     }
 
-    public Document parserXML (File file)
-        throws SAXException,
-            IOException,
-            ParserConfigurationException
-    {
-        return DocumentBuilderFactory.newInstance()
-                                     .newDocumentBuilder()
-                                     .parse(file);
-    }
+
 
 }
