@@ -6,12 +6,65 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
-class Output
+
+class Output 
 {
+	public static String startCal()
+	{
+		return "<html> \n <body> \n\n\n";
+	}
+	
+	public static String endCal()
+	{
+		return "</body> \n </html>";
+	}
+	
+	public static String createHeader(String header)
+	{
+		return "<h4>"+header+"</h4> \n";
+	}
+	
+	public static String createTable(int border)
+	{
+		return "<table border='"+border+"'> \n";
+	}
+	
+	public static String endTable()
+	{
+		return "</table>";
+	}
+	
+	public static String createRow(int height)
+	{
+		return "<tr style=\"height:"+height+"px;\">";
+	}
+	
+	public static String endRow()
+	{
+		return "</tr>";
+	}
+	
+	public static String createCol(int width)
+	{
+		return "<td style=\"width:"+width+"px\">";
+	}
+	
+	public static String endCol()
+	{
+		return "</td>";
+	}
+	
+	public static String addEvent(String link, String title, List<Event> thisDay, int x)
+	{
+		return "<a href=\""+link+"\">"+title+"</a> "+thisDay.get(x).myStart.get(Calendar.HOUR)+":"+
+					thisDay.get(x).myStart.get(Calendar.MINUTE) +" - "+
+					thisDay.get(x).myEnd.get(Calendar.HOUR)+":"+thisDay.get(x).myEnd.get(Calendar.MINUTE)+"<br/>";
+	}
 	
 	public static void generateCalendar(String inputFilename)
 	{
-		BufferedWriter br= null;
+		BufferedWriter br = null;
+		
 		try
 		{
 			File file = new File("Calendar.html");
@@ -25,11 +78,7 @@ class Output
 			
 			Processor process = new Processor();
 
-			br.write("<html>");
-			br.newLine();
-			br.write("<body>");
-			br.newLine();
-			br.newLine();
+			br.write(startCal());
 
 			//find number of months in xml file
 			int numMonths = 12;
@@ -52,20 +101,18 @@ class Output
 				
 				//if(thisMonth.size() ==0) continue;
 				//thisMonth.get(i).myStart.get(Calendar.MONTH)
-				br.write("<h4>"+intToMonth(i)+"</h4>");
-				br.newLine();
-				br.write("<table border='1'>");
-				br.newLine();
-				br.write("<tr>");
+				br.write(createHeader(intToMonth(i)));
+				br.write(createTable(1));
+				br.write(createRow(100));
 				br.write("<td>Sun</td><td>Mon</td><td>Tues</td><td>Wed</td>" +
 				"<td>Thurs</td><td>Fri</td><td>Sat</td>");
-				br.write("</tr>");
+				br.write(endRow());
 				//if statement to determine what first day of month is
 				int weekCount = 0;
 				int dayCount =0;
 				for(int j = 0;j<5;j++)
 				{
-					br.write("<tr style=\"height:100px;\">");
+					br.write(createRow(100));
 					//determine how many to skip based off of day of week; possibly do another timeframefinder
 					
 					//List<Event> thisWeek =  process.timeFrameFinder(thisMonth,
@@ -93,25 +140,23 @@ class Output
 						}
 						
 						dayCount+=1;
-						br.write("<td style=\"width:250px\">");					
+						br.write(createCol(250));					
 						
 						for(int x = 0;x<thisDay.size();x++)
 						{	
 							String link = thisDay.get(x).generateDetailsHTML();
 							String title = thisDay.get(x).getSubject();
-							br.write("<a href=\""+link+"\">"+title+"</a> "+thisDay.get(x).myStart.get(Calendar.HOUR)+":"+thisDay.get(x).myStart.get(Calendar.MINUTE)+":" +
-									"-"+thisDay.get(x).myEnd.get(Calendar.HOUR)+":"+thisDay.get(x).myEnd.get(Calendar.MINUTE)+"<br/>");
+							br.write(addEvent(link,title,thisDay,x));
 							
 						}						
-						br.write("</td>");						
+						br.write(endCol());						
 						br.newLine();  
 					}	
-					br.write("</tr>");
+					br.write(endRow());
 				}
-				br.write("</table>");
+				br.write(endTable());
 			}
-			br.write("</body>");
-			br.write("</html>");
+			br.write(endCal());
 			br.close();
 		}
 		catch (Exception e)
