@@ -7,10 +7,10 @@ import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import output.Output;
+import output.Tag;
 import processor.Processor;
 
 public class Main
@@ -49,24 +49,28 @@ public class Main
 				List<Event> thisMonth = new ArrayList<Event>();
 				for(Event e : eventList){					
 					if(e.getStartDate().get(Calendar.MONTH) == i) thisMonth.add(e);
-					System.out.println(e.getStartDate().get(Calendar.MONTH));
+					//System.out.println(e.getStartDate().get(Calendar.MONTH));
 				}
 				
 				
 				//if(thisMonth.size() ==0) continue;
 				//thisMonth.get(i).myStart.get(Calendar.MONTH)
-				br.write(Output.createHeader(Output.intToMonth(i)));
-				br.write(Output.createTable(1));
-				br.write(Output.createRow(100));
-				br.write("<td>Sun</td><td>Mon</td><td>Tues</td><td>Wed</td>" +
-				"<td>Thurs</td><td>Fri</td><td>Sat</td>");
-				br.write(Output.endRow());
-				//if statement to determine what first day of month is
+				
+				//header tag
+				Tag header = new Tag("header");
+				header.addInnerHTML(Output.intToMonth(i));
+				br.write(header.getHTML());
+				
+				Tag table = new Tag("table","border",1);
+				Tag weeks = new Tag("tr");
+				weeks.addInnerHTML("<td>Sun</td><td>Mon</td><td>Tues</td><td>Wed</td><td>Thurs</td><td>Fri</td><td>Sat</td>");
+				table.addInnerHTML(weeks);
+				
 				int weekCount = 0;
 				int dayCount =0;
 				for(int j = 0;j<5;j++)
 				{
-					br.write(Output.createRow(100));
+					Tag row = new Tag("tr","height",100);
 					//determine how many to skip based off of day of week; possibly do another timeframefinder
 					
 					//List<Event> thisWeek =  process.timeFrameFinder(thisMonth,
@@ -94,22 +98,27 @@ public class Main
 						}
 						
 						dayCount+=1;
-						br.write(Output.createCol(250));					
+						Tag col = new Tag("td","width",250);				
 						
 						for(int x = 0;x<thisDay.size();x++)
 						{	
 							String link = thisDay.get(x).generateDetailsHTML();
 							String title = thisDay.get(x).getSubject();
-							br.write(Output.addEvent(link,title,thisDay,x));
-							
-						}						
-						br.write(Output.endCol());						
-						br.newLine();  
-					}	
-					br.write(Output.endRow());
+							col.addInnerHTML("<a href=\""+link+"\">"+title+"</a> "+thisDay.get(x).myStart.get(Calendar.HOUR)+":"+
+												thisDay.get(x).myStart.get(Calendar.MINUTE) +" - "+
+												thisDay.get(x).myEnd.get(Calendar.HOUR)+":"+
+												thisDay.get(x).myEnd.get(Calendar.MINUTE)+"<br/>");							
+						}
+						if (col.getHTML() != null)
+							row.addInnerHTML(col);
+					}
+					if (row.getHTML() != null)
+						table.addInnerHTML(row);
 				}
-				br.write(Output.endTable());
+				br.write(table.getHTML());
+				
 			}
+			
 			br.write(Output.endCal());
 			br.close();
 		}
@@ -123,6 +132,10 @@ public class Main
 		public static void main(String[] args){
 			
 			generateCalendar("DukeBasketBall.xml");
-			//   generateCalendar("NFL.xml");
+
+//			Output.generateCalendar("DukeBasketBall.xml");
+		    //generateCalendar("NFL.xml");
+
+
 		}
 }

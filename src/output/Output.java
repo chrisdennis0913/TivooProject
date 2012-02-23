@@ -5,7 +5,9 @@ import input.Event;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -22,6 +24,15 @@ public class Output
 	public static String endCal()
 	{
 		return "</body> \n </html>";
+	}
+	
+	static String[] dayList = {"<td>Sun</td>/n","<td>Mon</td>/n", "<td>Tues</td>/n", "<td>Wed</td>/n", 
+		"<td>Thurs</td>/n", "<td>Fri</td>/n", "<td>Sat</td>/n"};
+	static List<String> days = Arrays.asList(dayList);
+	
+	public static List<String> daysOfWeek()
+	{
+		return days;
 	}
 	
 	public static String createHeader(String header)
