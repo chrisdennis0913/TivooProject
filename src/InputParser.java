@@ -1,8 +1,13 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
@@ -15,6 +20,7 @@ public abstract class InputParser
 {
     protected List<Event> EventList;
     private Document doc = null;
+    protected Stack<Node> stack;
 
 
     public List<Event> getListOfEvents ()
@@ -36,7 +42,9 @@ public abstract class InputParser
                 for (int i = 0; i < nl.getLength(); i++)
                 {
                     if (tagType.equals("Calendar")) EventList.add(parseEvent(nl.item(i)));
-                    else if (tagType.equals("row")) EventList.add(parseEvent(nl.item(i).getFirstChild().getNextSibling()));
+                    else if (tagType.equals("row")) EventList.add(parseEvent(nl.item(i)
+                                                                               .getFirstChild()
+                                                                               .getNextSibling()));
                 }
             }
             catch (Exception error)
@@ -66,6 +74,30 @@ public abstract class InputParser
                                      .newDocumentBuilder()
                                      .parse(file);
     }
-    protected abstract Event parseEvent(Node node);
+
+
+    protected Event parseEvent (Node node)
+    {
+        stack = new Stack<Node>();
+        stack.push(node);
+        Event event = new Event();
+        Calendar startCal = new GregorianCalendar();
+        Calendar endCal = new GregorianCalendar();
+        Map<String, String> myNodeMap = new HashMap<String, String>();
+
+        while (!stack.isEmpty())
+        {
+            Node current = stack.pop();
+            event = subParsing(current, event, startCal, endCal, myNodeMap);
+        }
+        return event;
+    }
+
+
+    protected abstract Event subParsing (Node current,
+                                         Event curEvent,
+                                         Calendar startCal,
+                                         Calendar endCal,
+                                         Map<String, String> myNodeMap);
 
 }

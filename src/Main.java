@@ -122,9 +122,14 @@ public class Main
 	}
 		public static void main(String[] args){
 			
+<<<<<<< HEAD
 			generateCalendar("DukeBasketBall.xml");
 //		    generateCalendar("NFL.xml");
 			
 			
+=======
+//			Output.generateCalendar("DukeBasketBall.xml");
+		    Output.generateCalendar("NFL.xml");
+>>>>>>> origin/master
 		}
 }

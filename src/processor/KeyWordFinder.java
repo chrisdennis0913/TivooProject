@@ -4,13 +4,22 @@ import input.Event;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class KeyWordFinder {
-	public List<Event> keywordFinder (List<Event> myEvents, String keyword){
+
+public class KeyWordFinder implements FinderInterface{
+	
+	private String key;
+	public KeyWordFinder (String keyword){
+		key = keyword;
+	}
+	
+	public List<Event> finder (List<Event> myEvents){
 		ArrayList<Event> keyList = new ArrayList<Event> ();
 		
 		for (Event e: myEvents){
-			if (e.getSubject().indexOf(keyword) != -1){
+			if (e.getSubject().indexOf(key) != -1){
 				keyList.add(e);
 			}
 		}
