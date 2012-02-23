@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 
-public class Tag extends Output {
+public class Tag {
 	
 	String type;
 	String end;
