@@ -16,5 +16,4 @@ public class Processor {
 		return timeMethod.finder(myEvents);  
 	}
 	
-	
 }
