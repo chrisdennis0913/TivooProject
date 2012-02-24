@@ -1,4 +1,5 @@
 package input;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,6 +17,7 @@ public class DukeBasketBallParser extends InputParser
     {
         super("DukeBasketball.xml", "Calendar");
     }
+
 
     @SuppressWarnings("deprecation")
     public Event subParsing (Node node,

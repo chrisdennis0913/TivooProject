@@ -1,17 +1,10 @@
 import input.Event;
 import input.InputParser;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-
 import output.Output;
-import output.Tag;
 import processor.Processor;
+
 
 public class Main
 {
@@ -33,5 +26,5 @@ public class Main
 
 
 		}
-}
 
+}

@@ -1,18 +1,17 @@
 package output;
 
 import input.Event;
+
 import input.InputParser;
 import processor.Processor;
+
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Output 
