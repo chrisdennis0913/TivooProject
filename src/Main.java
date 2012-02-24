@@ -24,9 +24,11 @@ public class Main
             Collections.sort(eventList);
 			//processor
 			Processor process = new Processor();
+			//process.processSort(eventList); -- process method that sorts the eventList 
 			//output
 			Output o = new Output(eventList);
-			o.generateCalendar();
+			o.sortedList();
+			//o.generateCalendar();
 
 
 
