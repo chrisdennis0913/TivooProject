@@ -55,6 +55,7 @@ public abstract class InputParser
                 error.printStackTrace();
             }
         }
+        System.out.println(EventList.get(0));
     }
 
     public static class ParserFactory

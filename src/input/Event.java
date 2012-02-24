@@ -2,6 +2,7 @@ package input;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -32,8 +33,35 @@ public class Event implements Comparable<Event>
 		if(myStart.get(Calendar.DAY_OF_MONTH) < other.myStart.get(Calendar.DAY_OF_MONTH)) return -1;
 		else if(myStart.get(Calendar.DAY_OF_MONTH) > other.myStart.get(Calendar.DAY_OF_MONTH)) return 1;
 
-		// TODO Auto-generated method stub
 		return 0;
+	}
+	public String toString(){
+	    StringBuilder result = new StringBuilder();
+	    String newLine = System.getProperty("line.separator");
+	    result.append( this.getClass().getName() );
+	    result.append( " Object {" );
+	    result.append(newLine);
+
+	    //determine fields declared in this class only (no fields of superclass)
+	    Field[] fields = this.getClass().getDeclaredFields();
+
+	    //print field names paired with their values
+	    for ( Field field : fields  ) {
+	      result.append("  ");
+	      try {
+	        result.append( field.getName() );
+	        result.append(": ");
+	        //requires access to private field:
+	        result.append( field.get(this) );
+	      }
+	      catch ( IllegalAccessException ex ) {
+	        System.out.println(ex);
+	      }
+	      result.append(newLine);
+	    }
+	    result.append("}");
+
+	    return result.toString();
 	}
     
     public String getSubject ()

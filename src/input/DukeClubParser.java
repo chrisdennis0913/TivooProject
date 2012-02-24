@@ -23,12 +23,11 @@ public class DukeClubParser extends InputParser
     {
 
         clubNodeMap.put("allday", "All Day?");
-        clubNodeMap.put("Description", "Description");
+        clubNodeMap.put("description", "Description");
         clubNodeMap.put("link", "Link");
 
         //check if it is one of the categories you want, and populate the corresponding field in event
         String nodeName = node.getNodeName();
-        System.out.println(nodeName);
         String nodeText = node.getTextContent();
 
         if (nodeName.equals("summary")) curEvent.mySubject = nodeText;
@@ -46,10 +45,8 @@ public class DukeClubParser extends InputParser
                 if (current.getNodeName().equals("address"))
                 {
                     curEvent.detailMap.put("Location", current.getTextContent());
-                    System.out.println("    "+current.getTextContent());
                 }
             }
-            System.out.println("     location");
             return curEvent;
         }
         else if (nodeName.equals("categories"))

@@ -20,7 +20,6 @@ public class Main
         @SuppressWarnings("unused")
         Processor process = new Processor();
         //output
-        System.out.println(eventList.get(0).myStart);
         Output o = new Output(eventList);
         o.generateCalendar();
     }
