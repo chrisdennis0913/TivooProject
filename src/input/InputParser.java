@@ -47,6 +47,7 @@ public abstract class InputParser
                     else if (tagType.equals("row")) EventList.add(parseEvent(nl.item(i)
                                                                                .getFirstChild()
                                                                                .getNextSibling()));
+                    else if (tagType.equals("event")) EventList.add(parseEvent(nl.item(i)));
                 }
             }
             catch (Exception error)
@@ -62,6 +63,7 @@ public abstract class InputParser
         {
             if (filename.equals("DukeBasketBall.xml")) return new DukeBasketBallParser();
             else if (filename.equals("NFL.xml")) return new XMLtvParser();
+            else if (filename.equals("DukeClubsSample.xml")) return new DukeClubParser();
             else return null;
         }
     }

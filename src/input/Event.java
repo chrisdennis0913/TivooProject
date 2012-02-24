@@ -73,7 +73,6 @@ public class Event implements Comparable<Event>
 			out.write(html.toString());
 			out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
