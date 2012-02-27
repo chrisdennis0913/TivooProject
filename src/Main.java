@@ -20,8 +20,9 @@ public class Main
 			//processor
 			Processor process = new Processor();
 			
-			//process.processSort(eventList); -- process method that sorts the eventList
-			// --could possibly be in output method if that would look better
+			// -- not sure exactly how to call this right now but once processor is done should be easy
+			//Sorting sort = new Sorting(eventList);
+			//sort.sorting(EventList); 
 			
 			//output
 			int year = 2; int month = 0; int date = 1;

@@ -79,7 +79,9 @@ public class Output
 
 		try
 		{
-			//Processor.sort(EventList) if it needs to be in this class
+			// -- not sure exactly how to call this right now but once processor is done should be easy
+			//Sorting sort = new Sorting(eventList);
+			//sort.sorting(EventList); 
 			File file = new File("Conflicts.html");
 			FileWriter fw = new FileWriter(file);
 
@@ -131,7 +133,9 @@ public class Output
 
 		try
 		{
-			//Processor.sort(EventList) if it needs to be in this class
+			// -- not sure exactly how to call this right now but once processor is done should be easy
+			//Sorting sort = new Sorting(eventList);
+			//sort.sorting(EventList); 
 			File file = new File("List.html");
 			FileWriter fw = new FileWriter(file);
 
