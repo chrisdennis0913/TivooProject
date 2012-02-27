@@ -34,28 +34,28 @@ public abstract class InputParser
 
     protected InputParser (String fileName, String tagType)
     {
+
+        try
         {
-            try
+            doc = parserXML(new File(fileName));
+            EventList = new ArrayList<Event>();
+            //visit(doc, 0, EventList);
+            NodeList nl = doc.getElementsByTagName(tagType);
+            for (int i = 0; i < nl.getLength(); i++)
             {
-                doc = parserXML(new File(fileName));
-                EventList = new ArrayList<Event>();
-                //visit(doc, 0, EventList);
-                NodeList nl = doc.getElementsByTagName(tagType);
-                for (int i = 0; i < nl.getLength(); i++)
-                {
-                    if (tagType.equals("Calendar")) EventList.add(parseEvent(nl.item(i)));
-                    else if (tagType.equals("row")) EventList.add(parseEvent(nl.item(i)
-                                                                               .getFirstChild()
-                                                                               .getNextSibling()));
-                    else if (tagType.equals("event")) EventList.add(parseEvent(nl.item(i)));
-                }
-            }
-            catch (Exception error)
-            {
-                error.printStackTrace();
+                if (tagType.equals("Calendar")) EventList.add(parseEvent(nl.item(i)));
+                else if (tagType.equals("row")) EventList.add(parseEvent(nl.item(i)
+                                                                           .getFirstChild()
+                                                                           .getNextSibling()));
+                else if (tagType.equals("event")) EventList.add(parseEvent(nl.item(i)));
+                else if (tagType.equals("entry")) EventList.add(parseEvent(nl.item(i)));
             }
         }
-        System.out.println(EventList.get(0));
+        catch (Exception error)
+        {
+            error.printStackTrace();
+        }
+
     }
 
     public static class ParserFactory
@@ -65,6 +65,7 @@ public abstract class InputParser
             if (filename.equals("DukeBasketBall.xml")) return new DukeBasketBallParser();
             else if (filename.equals("NFL.xml")) return new XMLtvParser();
             else if (filename.equals("DukeClubsSample.xml")) return new DukeClubParser();
+            else if (filename.equals("GoogleCalSample.xml")) return new GoogleCalParser();
             else return null;
         }
     }

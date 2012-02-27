@@ -21,8 +21,6 @@ public class DukeClubParser extends InputParser
                              Calendar endCal,
                              Map<String, String> clubNodeMap)
     {
-
-        clubNodeMap.put("allday", "All Day?");
         clubNodeMap.put("description", "Description");
         clubNodeMap.put("link", "Link");
 
@@ -72,7 +70,6 @@ public class DukeClubParser extends InputParser
             }
             return curEvent;
         }
-        // categories, category, split on "/" and take last value
         else if (nodeName.equals("start"))
         {
             Stack<Node> startStack = new Stack<Node>();
