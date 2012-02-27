@@ -1,6 +1,7 @@
 import input.Event;
 import input.InputParser;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
 import output.Output;
 import processor.Processor;
@@ -23,7 +24,13 @@ public class Main
 			// --could possibly be in output method if that would look better
 			
 			//output
+			int year = 2; int month = 0; int date = 1;
+			GregorianCalendar start = new GregorianCalendar(year, month, date);
+			int eYear = 2012; int eMonth = 1; int eDate = 30;
+			GregorianCalendar end = new GregorianCalendar(eYear, eMonth, eDate);
+			
 			Output o = new Output(eventList);
+			o.dayWeekMonth(start, end);
 			//o.sortedList();
 			//o.conflictList();
 			//o.generateCalendar();
