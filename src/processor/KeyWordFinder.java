@@ -11,9 +11,9 @@ public class KeyWordFinder implements FinderInterface{
 	private ArrayList<String> key = new ArrayList<String>();
 	private boolean incOrExc; 
 	
-	public KeyWordFinder (List<String> listofKeywords, ProcessParameters params){
+	public KeyWordFinder (List<String> listofKeywords, boolean incOrExc){
 		key.addAll(listofKeywords);
-		incOrExc = params.getIncOrExc();
+		this.incOrExc = incOrExc;
 	}
 	
 	public List<Event> finder (List<Event> myEvents){

@@ -9,8 +9,9 @@ public class NameSorter implements SorterInterface{
 
 
 	boolean ascOrDes; 
-	public NameSorter (ProcessParameters params){
-		ascOrDes = params.getAscOrDes();
+
+	public NameSorter(boolean ascOrDes) {
+		this.ascOrDes = ascOrDes;
 	}
 
 	public List<Event> sorter (List<Event> myEvents) {

@@ -11,10 +11,10 @@ public class TimeFrameFinder implements FinderInterface{
 	private boolean incOrExc;
 	
 	private GregorianCalendar startTime, endTime;
-	public TimeFrameFinder (GregorianCalendar start, GregorianCalendar end, ProcessParameters params){
+	public TimeFrameFinder (GregorianCalendar start, GregorianCalendar end, boolean incOrExc){
 		startTime = start;
 		endTime = end;
-		incOrExc = params.getIncOrExc();
+		this.incOrExc = incOrExc;
 	}
 	
 	public List<Event> finder (List<Event> myEvents){

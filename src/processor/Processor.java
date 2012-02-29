@@ -8,48 +8,47 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 
-public class Processor {
-	private FinderFactory factory = new FinderFactory(); 
-	private SorterFactory sfactory = new SorterFactory();
+public class Processor {	
+	private List<FinderInterface> findMethod = new ArrayList<FinderInterface>();
+	private List<SorterInterface> sortMethod = new ArrayList<SorterInterface>();
+	private List<Event> events;
 	
-	private FinderInterface wordMethod, timeMethod;
-	private SorterInterface sortMethod;
-	
-	public List<Event> findByKeyWord (List<Event> myEvents, List<String> keyword, ProcessParameters params){
-		wordMethod = factory.CreateKeyWordFinder(keyword, params);
-		
-		if (params.getSortMethod() == ProcessParameters.SORT_BY_NAME)
-			sortMethod = sfactory.CreateNameSorter(params);
-		else
-			sortMethod = sfactory.CreateTimeSorter(params);
-		
-		return sortMethod.sorter(wordMethod.finder(myEvents));
+	public Processor (List<Event> myEvents){
+		events = myEvents;
 	}
 	
-	public List<Event> findByTimeFrame (List<Event> myEvents, GregorianCalendar start, GregorianCalendar end, 
-			ProcessParameters params){
-		timeMethod = factory.CreateTimeFrameFinder(start, end, params);
-				
-		if (params.getSortMethod() == ProcessParameters.SORT_BY_NAME)
-			sortMethod = sfactory.CreateNameSorter(params);
-		else
-			sortMethod = sfactory.CreateTimeSorter(params);
-		
-		return sortMethod.sorter(timeMethod.finder(myEvents));
+	public void addSorter (SorterInterface sort){
+		sortMethod.add(sort);
 	}
 	
+	public void addFinder (FinderInterface find){
+		findMethod.add(find);
+	}
+	
+	public List<Event> process (){
+		List<Event> tempEvents = events; 
+		for (FinderInterface f: findMethod){
+			tempEvents = f.finder(tempEvents);
+		}	
+		for (SorterInterface s: sortMethod){
+			tempEvents = s.sorter(tempEvents);
+		}
+		return tempEvents;
+	}
 	
 	public static void main (String args[]){
 		InputParser par = new DukeBasketBallParser();
-		
-		Processor process = new Processor ();
+
+		Processor process = new Processor (par.getListOfEvents());		
 		List <String> s = new ArrayList<String> ();
 		s.add("Boston"); s.add("Tennessee"); s.add("Michigan");
-		ProcessParameters p = new ProcessParameters(false, true, ProcessParameters.SORT_BY_NAME);
-		List <Event> e = process.findByKeyWord(par.getListOfEvents(), s, p);
 		
-		for (Event ev: e){
-			System.out.println (ev.toString());
+		process.addFinder(new KeyWordFinder (s, false));
+		process.addSorter(new NameSorter (false)); 
+		
+		List<Event> ev = process.process(); 
+		for (Event e: ev){
+			System.out.println (e.toString());
 		}
 		
 	}
