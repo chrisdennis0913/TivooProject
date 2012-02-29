@@ -5,14 +5,12 @@ import input.Event;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimeSorter implements SorterInterface{
+public class StartTimeSorter implements SorterInterface{
 
-	private int sortmethod; 
 	private boolean ascOrDes; 
 
-	public TimeSorter (ProcessParameters param){
-		sortmethod = param.getSortMethod();
-		ascOrDes = param.getAscOrDes();
+	public StartTimeSorter (boolean ascOrDes){
+		this.ascOrDes = ascOrDes;
 	}
 
 
@@ -23,14 +21,9 @@ public class TimeSorter implements SorterInterface{
 			for (int j=i; j<= arrayEvents.length-1; j++){
 
 				if ( ((arrayEvents[i].getStartDate().getTimeInMillis() >= arrayEvents[j].getStartDate().getTimeInMillis()) && 
-						(ascOrDes) && (sortmethod == ProcessParameters.SORT_BY_STARTTIME)) || 
+						(ascOrDes)) || 
 						((arrayEvents[i].getStartDate().getTimeInMillis() < arrayEvents[j].getStartDate().getTimeInMillis()) && 
-						(!ascOrDes) && (sortmethod == ProcessParameters.SORT_BY_STARTTIME)) ||
-
-						((arrayEvents[i].getEndDate().getTimeInMillis() <= arrayEvents[j].getEndDate().getTimeInMillis()) && 
-						(ascOrDes) && (sortmethod == ProcessParameters.SORT_BY_ENDTIME)) ||
-						((arrayEvents[i].getEndDate().getTimeInMillis() > arrayEvents[j].getEndDate().getTimeInMillis()) && 
-						(!ascOrDes) && (sortmethod == ProcessParameters.SORT_BY_ENDTIME))
+						(!ascOrDes))
 						)
 				{
 					Event temp = arrayEvents[i];
