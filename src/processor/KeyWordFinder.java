@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class KeyWordFinder implements FinderInterface{
+public class KeyWordFinder implements SearchInterface{
 	
 	private ArrayList<String> key = new ArrayList<String>();
 	private boolean incOrExc; 
@@ -16,7 +16,7 @@ public class KeyWordFinder implements FinderInterface{
 		this.incOrExc = incOrExc;
 	}
 	
-	public List<Event> finder (List<Event> myEvents){
+	public List<Event> search (List<Event> myEvents){
 		ArrayList<Event> keyList = new ArrayList<Event> ();
 		
 		for (Event e: myEvents){

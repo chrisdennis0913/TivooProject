@@ -6,8 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 
-
-public class TimeFrameFinder implements FinderInterface{
+public class TimeFrameFinder implements SearchInterface{
 	private boolean incOrExc;
 	
 	private GregorianCalendar startTime, endTime;
@@ -17,7 +16,7 @@ public class TimeFrameFinder implements FinderInterface{
 		this.incOrExc = incOrExc;
 	}
 	
-	public List<Event> finder (List<Event> myEvents){
+	public List<Event> search (List<Event> myEvents){
 		ArrayList<Event> timeList = new ArrayList<Event> ();
 		
 		for (Event e: myEvents){

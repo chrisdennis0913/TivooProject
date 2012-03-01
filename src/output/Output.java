@@ -47,7 +47,7 @@ public class Output
 				Tag event = new Tag("tr","height",100);
 				TimeFrameFinder frame = new TimeFrameFinder(first,last, true);
 //				List<Event> window = frame.finder(eventList);
-				List<Event> window = frame.finder(eventList);
+				List<Event> window = frame.search(eventList);
 				for (Event d: window)
 				{
 					Tag col = new Tag("td","width",250);
@@ -102,7 +102,7 @@ public class Output
 				Tag event = new Tag("tr","height",100);
 				TimeFrameFinder day = new TimeFrameFinder(e.getStartDate(),e.getEndDate(), true);
 //				List<Event> conflicts = day.finder(eventList);
-				List<Event> conflicts = day.finder(eventList);
+				List<Event> conflicts = day.search(eventList);
 				for (Event d: conflicts)
 				{
 					Tag col = new Tag("td","width",250);
