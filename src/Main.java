@@ -43,7 +43,7 @@ public class Main
         GregorianCalendar end = new GregorianCalendar(eYear, eMonth, eDate);
 
         Output o = new Output(eventList);
-        o.dayWeekMonth(start, end);
+//        o.dayWeekMonth(start, end);
         //o.sortedList();
         //o.conflictList();
         o.generateCalendar();

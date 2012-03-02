@@ -1,10 +1,6 @@
 package input;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import org.w3c.dom.Node;
@@ -19,14 +15,12 @@ public class DukeBasketBallParser extends InputParser
     }
 
 
-    @SuppressWarnings("deprecation")
     public Event subParsing (Node node,
                              Event curEvent,
                              Calendar startCal,
                              Calendar endCal,
                              Map<String, String> bBallNodeMap)
     {
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         bBallNodeMap.put("Description", "Description");
         bBallNodeMap.put("Location", "Location");
         bBallNodeMap.put("Priority", "Priority");
@@ -42,19 +36,11 @@ public class DukeBasketBallParser extends InputParser
         if (nodeName.equals("Subject")) curEvent.mySubject = nodeText;
         else if (nodeName.equals("StartDate"))
         {
-            Date date = null;
-            try
-            {
-                date = df.parse(nodeText);
-            }
-            catch (ParseException e)
-            {
-                e.printStackTrace();
-            }
-            //startCal.setTime(date);
-            startCal.set(Calendar.DAY_OF_MONTH, date.getDate());
-            startCal.set(Calendar.MONTH, date.getMonth());
-            startCal.set(Calendar.YEAR, date.getYear());
+            //12/30/2011
+            String[] myDateArray=nodeText.split("/");
+            startCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(myDateArray[1]));
+            startCal.set(Calendar.MONTH, Integer.parseInt(myDateArray[0]));
+            startCal.set(Calendar.YEAR, Integer.parseInt(myDateArray[2]));
         }
         else if (nodeName.equals("StartTime"))
         {
@@ -66,19 +52,10 @@ public class DukeBasketBallParser extends InputParser
         }
         else if (nodeName.equals("EndDate"))
         {
-            Date date = null;
-            try
-            {
-                date = df.parse(nodeText);
-            }
-            catch (ParseException e)
-            {
-                e.printStackTrace();
-            }
-            //endCal.setTime(date);
-            endCal.set(Calendar.DAY_OF_MONTH, date.getDate());
-            endCal.set(Calendar.MONTH, date.getMonth());
-            endCal.set(Calendar.YEAR, date.getYear());
+            String[] myDateArray=nodeText.split("/");
+            endCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(myDateArray[1]));
+            endCal.set(Calendar.MONTH, Integer.parseInt(myDateArray[0]));
+            endCal.set(Calendar.YEAR, Integer.parseInt(myDateArray[2]));
         }
         else if (nodeName.equals("EndTime"))
         {

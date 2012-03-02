@@ -53,6 +53,7 @@ public class NFLParser extends InputParser
             startCal.set(Calendar.SECOND, Integer.parseInt(hms[2]));
 
             startCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date[2]));
+            System.out.println(date[0]);
             startCal.set(Calendar.MONTH, Integer.parseInt(date[1]));
             startCal.set(Calendar.YEAR, Integer.parseInt(date[0]));
         }
@@ -73,10 +74,11 @@ public class NFLParser extends InputParser
             endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hms[0]));
             endCal.set(Calendar.MINUTE, Integer.parseInt(hms[1]));
             endCal.set(Calendar.SECOND, Integer.parseInt(hms[2]));
-
-            endCal.set(Calendar.DAY_OF_MONTH, date.getDate());
-            endCal.set(Calendar.MONTH, date.getMonth());
-            endCal.set(Calendar.YEAR, date.getYear());
+            
+            String[] myDateArray=dateTime[0].split("-");
+            endCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(myDateArray[2]));
+            endCal.set(Calendar.MONTH, Integer.parseInt(myDateArray[1]));
+            endCal.set(Calendar.YEAR, Integer.parseInt(myDateArray[0]));
         }
         else if (xmlTVNodeMap.containsKey(nodeName)) event.detailMap.put(xmlTVNodeMap.get(nodeName),
                                                                          nodeText);
