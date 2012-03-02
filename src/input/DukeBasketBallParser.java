@@ -36,34 +36,31 @@ public class DukeBasketBallParser extends InputParser
         if (nodeName.equals("Subject")) curEvent.mySubject = nodeText;
         else if (nodeName.equals("StartDate"))
         {
-            //12/30/2011
-            String[] myDateArray=nodeText.split("/");
-            startCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(myDateArray[1]));
-            startCal.set(Calendar.MONTH, Integer.parseInt(myDateArray[0]));
-            startCal.set(Calendar.YEAR, Integer.parseInt(myDateArray[2]));
+            int[] times = parseDates(nodeText, "/");
+            startCal.set(Calendar.DAY_OF_MONTH, times[1]);
+            startCal.set(Calendar.MONTH, times[0]);
+            startCal.set(Calendar.YEAR, times[2]);
         }
         else if (nodeName.equals("StartTime"))
         {
-            String[] hms = nodeText.split(":");
-            startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hms[0]));
-            startCal.set(Calendar.MINUTE, Integer.parseInt(hms[1]));
-            String[] secAM_PM = hms[2].split(" ");
-            startCal.set(Calendar.SECOND, Integer.parseInt(secAM_PM[0]));
+            int[] times = parseTimes(nodeText, ":");
+            startCal.set(Calendar.HOUR_OF_DAY, times[0]);
+            startCal.set(Calendar.MINUTE, times[1]);
+            startCal.set(Calendar.SECOND, times[2]);
         }
         else if (nodeName.equals("EndDate"))
         {
-            String[] myDateArray=nodeText.split("/");
-            endCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(myDateArray[1]));
-            endCal.set(Calendar.MONTH, Integer.parseInt(myDateArray[0]));
-            endCal.set(Calendar.YEAR, Integer.parseInt(myDateArray[2]));
+            int[] times = parseDates(nodeText, "/");
+            endCal.set(Calendar.DAY_OF_MONTH, times[1]);
+            endCal.set(Calendar.MONTH, times[0]);
+            endCal.set(Calendar.YEAR, times[2]);
         }
         else if (nodeName.equals("EndTime"))
         {
-            String[] hms = nodeText.split(":");
-            endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hms[0]));
-            endCal.set(Calendar.MINUTE, Integer.parseInt(hms[1]));
-            String[] secAM_PM = hms[2].split(" ");
-            endCal.set(Calendar.SECOND, Integer.parseInt(secAM_PM[0]));
+            int[] times = parseTimes(nodeText, ":");
+            endCal.set(Calendar.HOUR_OF_DAY, times[0]);
+            endCal.set(Calendar.MINUTE, times[1]);
+            endCal.set(Calendar.SECOND, times[2]);
         }
         else if (bBallNodeMap.containsKey(nodeName)) curEvent.detailMap.put(bBallNodeMap.get(nodeName),
                                                                             nodeText);
@@ -78,5 +75,30 @@ public class DukeBasketBallParser extends InputParser
 
         return curEvent;
 
+    }
+
+
+    private int[] parseDates (String myText, String myRegex)
+    {
+        String[] myStrArray = myText.split(myRegex);
+        int[] myIntArray = new int[myStrArray.length];
+        for (int n = 0; n < myStrArray.length; n++)
+        {
+            myIntArray[n] = Integer.parseInt(myStrArray[n]);
+        }
+        return myIntArray;
+    }
+
+
+    private int[] parseTimes (String myText, String myRegex)
+    {
+        String[] myStrArray = myText.split(myRegex);
+        int[] myIntArray = new int[myStrArray.length];
+        for (int n = 0; n < 2; n++)
+        {
+            myIntArray[n] = Integer.parseInt(myStrArray[n]);
+        }
+        myIntArray[2] = Integer.parseInt(myStrArray[2].substring(0, 2));
+        return myIntArray;
     }
 }

@@ -1,10 +1,6 @@
 package input;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import org.w3c.dom.Node;
@@ -18,7 +14,6 @@ public class NFLParser extends InputParser
     }
 
 
-    @SuppressWarnings("deprecation")
     public Event subParsing (Node node,
                              Event event,
                              Calendar startCal,
@@ -26,7 +21,6 @@ public class NFLParser extends InputParser
                              Map<String, String> xmlTVNodeMap)
     {
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         xmlTVNodeMap.put("Col2", "Source");
         xmlTVNodeMap.put("Col3", "Season");
         xmlTVNodeMap.put("Col15", "Location");
@@ -43,42 +37,11 @@ public class NFLParser extends InputParser
 
         else if (nodeName.equals("Col8"))
         { //start time and date
-
-            String[] dateTime = nodeText.split("\\s+");
-            String[] date = dateTime[0].split("-");
-
-            String[] hms = dateTime[1].split(":");
-            startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hms[0]));
-            startCal.set(Calendar.MINUTE, Integer.parseInt(hms[1]));
-            startCal.set(Calendar.SECOND, Integer.parseInt(hms[2]));
-
-            startCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date[2]));
-            System.out.println(date[0]);
-            startCal.set(Calendar.MONTH, Integer.parseInt(date[1]));
-            startCal.set(Calendar.YEAR, Integer.parseInt(date[0]));
+            startCal = parseDateAndTime(startCal, nodeText);
         }
         else if (nodeName.equals("Col9"))
         { //end time and date
-            String[] dateTime = nodeText.split("\\s+");
-            Date date = null;
-            try
-            {
-                date = df.parse(nodeText);
-            }
-            catch (ParseException e)
-            {
-                e.printStackTrace();
-            }
-
-            String[] hms = dateTime[1].split(":");
-            endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hms[0]));
-            endCal.set(Calendar.MINUTE, Integer.parseInt(hms[1]));
-            endCal.set(Calendar.SECOND, Integer.parseInt(hms[2]));
-            
-            String[] myDateArray=dateTime[0].split("-");
-            endCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(myDateArray[2]));
-            endCal.set(Calendar.MONTH, Integer.parseInt(myDateArray[1]));
-            endCal.set(Calendar.YEAR, Integer.parseInt(myDateArray[0]));
+            endCal = parseDateAndTime(endCal, nodeText);
         }
         else if (xmlTVNodeMap.containsKey(nodeName)) event.detailMap.put(xmlTVNodeMap.get(nodeName),
                                                                          nodeText);
@@ -92,6 +55,21 @@ public class NFLParser extends InputParser
 
         return event;
 
+    }
+
+
+    private Calendar parseDateAndTime (Calendar myCal, String myText)
+    {
+        String[] dateTime = myText.split("\\s+");
+        String[] date = dateTime[0].split("-");
+        myCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date[2]));
+        myCal.set(Calendar.MONTH, Integer.parseInt(date[1]));
+        myCal.set(Calendar.YEAR, Integer.parseInt(date[0]));
+        String[] hms = dateTime[1].split(":");
+        myCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hms[0]));
+        myCal.set(Calendar.MINUTE, Integer.parseInt(hms[1]));
+        myCal.set(Calendar.SECOND, Integer.parseInt(hms[2]));
+        return myCal;
     }
 
 }

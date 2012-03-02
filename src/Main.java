@@ -23,6 +23,7 @@ public class Main
         List<Event> eventList = input.getListOfEvents();
         eventList.addAll(inputB.getListOfEvents());
         eventList.addAll(inputC.getListOfEvents());
+        eventList.addAll(inputD.getListOfEvents());
         Collections.sort(eventList);
 
         //processor

@@ -43,12 +43,11 @@ public abstract class InputParser
             NodeList nl = doc.getElementsByTagName(tagType);
             for (int i = 0; i < nl.getLength(); i++)
             {
-                if (tagType.equals("Calendar")) EventList.add(parseEvent(nl.item(i)));
-                else if (tagType.equals("row")) EventList.add(parseEvent(nl.item(i)
-                                                                           .getFirstChild()
-                                                                           .getNextSibling()));
-                else if (tagType.equals("event")) EventList.add(parseEvent(nl.item(i)));
-                else if (tagType.equals("entry")) EventList.add(parseEvent(nl.item(i)));
+                if (tagType.equals("row")) EventList.add(parseEvent(nl.item(i)
+                                                                      .getFirstChild()
+                                                                      .getNextSibling()));
+                else if (tagType.equals("Calendar") ||
+                         tagType.equals("event") || tagType.equals("entry")) EventList.add(parseEvent(nl.item(i)));
             }
         }
         catch (Exception error)
@@ -96,8 +95,19 @@ public abstract class InputParser
             Node current = stack.pop();
             event = subParsing(current, event, startCal, endCal, myNodeMap);
         }
-        String startInfo=printMyDate(event.myStart.get(Calendar.YEAR),event.myStart.get(Calendar.MONTH),event.myStart.get(Calendar.DAY_OF_MONTH),event.myStart.get(Calendar.HOUR_OF_DAY),event.myStart.get(Calendar.MINUTE));
-        String endInfo=printMyDate(event.myEnd.get(Calendar.YEAR),event.myEnd.get(Calendar.MONTH),event.myEnd.get(Calendar.DAY_OF_MONTH),event.myEnd.get(Calendar.HOUR_OF_DAY),event.myEnd.get(Calendar.MINUTE));;
+        String startInfo =
+            printMyDate(event.myStart.get(Calendar.YEAR),
+                        event.myStart.get(Calendar.MONTH),
+                        event.myStart.get(Calendar.DAY_OF_MONTH),
+                        event.myStart.get(Calendar.HOUR_OF_DAY),
+                        event.myStart.get(Calendar.MINUTE));
+        String endInfo =
+            printMyDate(event.myEnd.get(Calendar.YEAR),
+                        event.myEnd.get(Calendar.MONTH),
+                        event.myEnd.get(Calendar.DAY_OF_MONTH),
+                        event.myEnd.get(Calendar.HOUR_OF_DAY),
+                        event.myEnd.get(Calendar.MINUTE));
+        ;
         event.detailMap.put("Start", startInfo);
         event.detailMap.put("Finish", endInfo);
         return event;
@@ -119,7 +129,12 @@ public abstract class InputParser
     {
         String myMonth = convertMonth(month);
         String minute = "" + minutes;
+//        String timeOfDay="am";
         if (minutes < 10) minute = "0" + minutes;
+//        if (hour>12) {
+//            timeOfDay="pm";
+//            hour-=12;
+//        }
         return hour + ":" + minute + " on " + myMonth + " " + date + ", " +
                year + ".";
 
@@ -140,7 +155,6 @@ public abstract class InputParser
         else if (month == 10) return "October";
         else if (month == 11) return "November";
         else return "December";
-
     }
 
 }

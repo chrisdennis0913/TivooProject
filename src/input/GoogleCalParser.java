@@ -39,7 +39,6 @@ public class GoogleCalParser extends InputParser
                 if (summaryArray[0].equals("When"))
                 {
                     String[] singleEventArray = nodeText.split(" ");
-
                     //parse and put in the dates and times
                     int myMonth = parseMonth(singleEventArray[2]);
                     startCal.set(Calendar.MONTH, myMonth);
@@ -62,77 +61,19 @@ public class GoogleCalParser extends InputParser
                     // take care of regular, then do all day events
                     if (Character.isDigit(singleEventArray[5].charAt(0)))
                     {
-                        int myHour;
-                        //if no colon
-                        if (!singleEventArray[5].contains(":"))
-                        {
-
-                            myHour =
-                                Integer.parseInt(singleEventArray[5].substring(0,
-                                                                               singleEventArray[5].length() - 2));
-                            startCal.set(Calendar.MINUTE, 0);
-                        }
-                        else
-                        // if colon
-                        {
-                            myHour =
-                                Integer.parseInt(singleEventArray[5].substring(0,
-                                                                               singleEventArray[5].length() - 5));
-                            int myMin;
-                            myMin =
-                                Integer.parseInt(singleEventArray[5].substring(singleEventArray[5].length() - 4,
-                                                                               singleEventArray[5].length() - 2));
-                            startCal.set(Calendar.MINUTE, myMin);
-                        }
-                        //check if pm
-                        if (singleEventArray[5].substring(singleEventArray[5].length() - 2)
-                                               .startsWith("p"))
-                        {
-                            myHour += 12;
-                        }
-                        startCal.set(Calendar.HOUR_OF_DAY, myHour);
-
-                        int myEndHour;
-                        //if no colon
-                        if (!singleEventArray[7].contains(":"))
-                        {
-
-                            myEndHour =
-                                Integer.parseInt(singleEventArray[7].substring(0,
-                                                                               singleEventArray[7].length() - 10));
-                            endCal.set(Calendar.MINUTE, 0);
-                        }
-                        else
-                        // if colon
-                        {
-                            myEndHour =
-                                Integer.parseInt(singleEventArray[7].substring(0,
-                                                                               singleEventArray[7].length() - 13));
-                            int myMin;
-                            myMin =
-                                Integer.parseInt(singleEventArray[7].substring(singleEventArray[7].length() - 12,
-                                                                               singleEventArray[7].length() - 10));
-                            endCal.set(Calendar.MINUTE, myMin);
-                        }
-                        //check if pm
-                        if (singleEventArray[7].substring(singleEventArray[7].length() - 2)
-                                               .startsWith("p"))
-                        {
-                            myEndHour += 12;
-                        }
-                        endCal.set(Calendar.HOUR_OF_DAY, myEndHour);
+                        startCal =
+                            parseMyTime(startCal, singleEventArray[5], 2);
+                        endCal = parseMyTime(endCal, singleEventArray[7], 10);
                     }
                     else
                     {//all day event
-                        startCal.set(Calendar.HOUR_OF_DAY, 0);
-                        endCal.set(Calendar.HOUR_OF_DAY, 23);
-                        startCal.set(Calendar.MINUTE, 0);
-                        endCal.set(Calendar.MINUTE, 59);
+                        startCal = allDayStart();
+                        endCal = allDayEnd();
                     }
                 }
                 else if (summaryArray[0].startsWith("Recurring Event"))
-                {// treat as all day event
-                 //Recurring Event<br> First start: 2011-08-29 14:50:00 EDT <br> Duration: 4500 <br>Where: LSRC 106 <br>Event Status: confirmed
+                {
+                    //Recurring Event<br> First start: 2011-08-29 14:50:00 EDT <br> Duration: 4500 <br>Where: LSRC 106 <br>Event Status: confirmed
                     String[] recurSplit = nodeText.split(" ");
                     String[] recurDateArray = recurSplit[4].split("-");
                     int recurYear = Integer.parseInt(recurDateArray[0]);
@@ -146,11 +87,8 @@ public class GoogleCalParser extends InputParser
                     startCal.set(Calendar.DAY_OF_MONTH, recurDay);
                     endCal.set(Calendar.DAY_OF_MONTH, recurDay);
 
-                    // figure out what a duration is
-                    startCal.set(Calendar.HOUR_OF_DAY, 0);
-                    endCal.set(Calendar.HOUR_OF_DAY, 23);
-                    startCal.set(Calendar.MINUTE, 0);
-                    endCal.set(Calendar.MINUTE, 59);
+                    startCal = allDayStart();
+                    endCal = allDayEnd();
                 }
             }
             catch (Exception error)
@@ -179,6 +117,24 @@ public class GoogleCalParser extends InputParser
     }
 
 
+    private GregorianCalendar allDayStart ()
+    {
+        GregorianCalendar myCal = new GregorianCalendar();
+        myCal.set(Calendar.HOUR_OF_DAY, 0);
+        myCal.set(Calendar.MINUTE, 0);
+        return myCal;
+    }
+
+
+    private GregorianCalendar allDayEnd ()
+    {
+        GregorianCalendar myCal = new GregorianCalendar();
+        myCal.set(Calendar.HOUR_OF_DAY, 23);
+        myCal.set(Calendar.MINUTE, 59);
+        return myCal;
+    }
+
+
     private int parseMonth (String month)
     {
         if (month.equals("Jan")) return 1;
@@ -193,6 +149,39 @@ public class GoogleCalParser extends InputParser
         else if (month.equals("Oct")) return 10;
         else if (month.equals("Nov")) return 11;
         return 12;
+    }
+
+
+    private Calendar parseMyTime (Calendar myCal, String current, int base)
+    {
+        int myHour;
+        //if no colon
+        if (!current.contains(":"))
+        {
+
+            myHour =
+                Integer.parseInt(current.substring(0, current.length() - base));
+            myCal.set(Calendar.MINUTE, 0);
+        }
+        else
+        // if colon
+        {
+            myHour =
+                Integer.parseInt(current.substring(0, current.length() - base -
+                                                      3));
+            int myMin;
+            myMin =
+                Integer.parseInt(current.substring(current.length() - base - 2,
+                                                   current.length() - base));
+            myCal.set(Calendar.MINUTE, myMin);
+        }
+        //check if pm
+        if (current.substring(current.length() - base).startsWith("p"))
+        {
+            myHour += 12;
+        }
+        myCal.set(Calendar.HOUR_OF_DAY, myHour);
+        return myCal;
     }
 
 }
