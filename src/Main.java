@@ -15,13 +15,15 @@ public class Main
         //get list of events
         InputParser input =
             InputParser.ParserFactory.generate("DukeBasketBall.xml");
-        InputParser inputB = InputParser.ParserFactory.generate("NFL.xml");
-        InputParser inputC =
+        InputParser inputC = InputParser.ParserFactory.generate("NFL.xml");
+        InputParser inputB = InputParser.ParserFactory.generate("GoogleCalSample.xml");
+        InputParser inputD =
             InputParser.ParserFactory.generate("DukeClubsSample.xml");
 
         List<Event> eventList = input.getListOfEvents();
         eventList.addAll(inputB.getListOfEvents());
         eventList.addAll(inputC.getListOfEvents());
+        eventList.addAll(inputD.getListOfEvents());
         Collections.sort(eventList);
 
         //processor
@@ -42,10 +44,10 @@ public class Main
         GregorianCalendar end = new GregorianCalendar(eYear, eMonth, eDate);
 
         Output o = new Output(eventList);
-        o.dayWeekMonth(start, end);
+//        o.dayWeekMonth(start, end);
         //o.sortedList();
         //o.conflictList();
-        //o.generateCalendar();
+        o.generateCalendar();
 
     }
 

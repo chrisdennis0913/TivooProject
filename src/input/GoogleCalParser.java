@@ -36,20 +36,22 @@ public class GoogleCalParser extends InputParser
             try
             {
                 String[] summaryArray = nodeText.split(":");
-                if (summaryArray[0].equals("Whin"))
+                if (summaryArray[0].equals("When"))
                 {
-                    String[] singleEventArray = summaryArray[1].split(" ");
+                    String[] singleEventArray = nodeText.split(" ");
                     //parse and put in the dates and times
-                    int myMonth = parseMonth(singleEventArray[1]);
+                    int myMonth = parseMonth(singleEventArray[2]);
                     startCal.set(Calendar.MONTH, myMonth);
                     endCal.set(Calendar.MONTH, myMonth);
-                    String dayString = singleEventArray[2];
+
+                    String dayString = singleEventArray[3];
                     int myDay =
                         Integer.parseInt(dayString.substring(0,
                                                              dayString.length() - 1));
                     startCal.set(Calendar.DAY_OF_MONTH, myDay);
                     endCal.set(Calendar.DAY_OF_MONTH, myDay);
-                    String yearString = singleEventArray[3];
+
+                    String yearString = singleEventArray[4];
                     int myYear = Integer.parseInt(yearString.substring(0, 4));
                     startCal.set(Calendar.YEAR, myYear);
                     endCal.set(Calendar.YEAR, myYear);
@@ -57,62 +59,52 @@ public class GoogleCalParser extends InputParser
                     Character.isDigit(ch);
 
                     // take care of regular, then do all day events
-                    if (Character.isDigit(singleEventArray[4].charAt(0)))
+                    if (Character.isDigit(singleEventArray[5].charAt(0)))
                     {
-                        int myHour =
-                            Integer.parseInt(singleEventArray[4].substring(0,
-                                                                           singleEventArray[4].length() - 2));
-                        //check if pm
-                        if (singleEventArray[4].substring(singleEventArray[4].length() - 2)
-                                               .startsWith("p"))
-                        {
-                            myHour += 12;
-                        }
-                        startCal.set(Calendar.HOUR_OF_DAY, myHour);
-                        startCal.set(Calendar.MINUTE, 0);
-
-                        int myEndHour =
-                            Integer.parseInt(singleEventArray[6].substring(0,
-                                                                           singleEventArray[6].length() - 2));
-                        //check if pm
-                        if (singleEventArray[6].substring(singleEventArray[6].length() - 2)
-                                               .startsWith("p"))
-                        {
-                            myEndHour += 12;
-                        }
-                        endCal.set(Calendar.HOUR_OF_DAY, myEndHour);
-                        endCal.set(Calendar.MINUTE, 0);
+                        startCal =
+                            parseMyTime(startCal, singleEventArray[5], 2);
+                        endCal = parseMyTime(endCal, singleEventArray[7], 10);
                     }
                     else
                     {//all day event
-                        startCal.set(Calendar.HOUR_OF_DAY, 0);
-                        endCal.set(Calendar.HOUR_OF_DAY, 23);
-                        startCal.set(Calendar.MINUTE, 0);
-                        endCal.set(Calendar.MINUTE, 59);
+                        startCal = allDayStart();
+                        endCal = allDayEnd();
                     }
-
                 }
                 else if (summaryArray[0].startsWith("Recurring Event"))
-                {// treat as all day event
-                    // figure out what a duration is
-                    startCal.set(Calendar.HOUR_OF_DAY, 0);
-                    endCal.set(Calendar.HOUR_OF_DAY, 23);
-                    startCal.set(Calendar.MINUTE, 0);
-                    endCal.set(Calendar.MINUTE, 59);
+                {
+                    //Recurring Event<br> First start: 2011-08-29 14:50:00 EDT <br> Duration: 4500 <br>Where: LSRC 106 <br>Event Status: confirmed
+                    String[] recurSplit = nodeText.split(" ");
+                    String[] recurDateArray = recurSplit[4].split("-");
+                    int recurYear = Integer.parseInt(recurDateArray[0]);
+                    int recurMonth = Integer.parseInt(recurDateArray[1]);
+                    int recurDay = Integer.parseInt(recurDateArray[2]);
+
+                    startCal.set(Calendar.YEAR, recurYear);
+                    endCal.set(Calendar.YEAR, recurYear);
+                    startCal.set(Calendar.MONTH, recurMonth);
+                    endCal.set(Calendar.MONTH, recurMonth);
+                    startCal.set(Calendar.DAY_OF_MONTH, recurDay);
+                    endCal.set(Calendar.DAY_OF_MONTH, recurDay);
+
+                    startCal = allDayStart();
+                    endCal = allDayEnd();
                 }
             }
             catch (Exception error)
             {
                 error.printStackTrace();
             }
-            if (nodeText.contains("Event Description")){
-                int startIndex=nodeText.indexOf("Event Description");
-                String[] endOfNodeText=nodeText.substring(startIndex).split(":");
+            if (nodeText.contains("Event Description"))
+            {
+                int startIndex = nodeText.indexOf("Event Description");
+                String[] endOfNodeText =
+                    nodeText.substring(startIndex).split(":");
                 curEvent.detailMap.put("Event Description", endOfNodeText[1]);
             }
         }
         else if (googleCalNodeMap.containsKey(nodeName)) curEvent.detailMap.put(googleCalNodeMap.get(nodeName),
-                                                                           nodeText);
+                                                                                nodeText);
 
         NodeList list = node.getChildNodes();
         for (int i = 0; i < list.getLength(); i++)
@@ -122,6 +114,24 @@ public class GoogleCalParser extends InputParser
         curEvent.myStart = (GregorianCalendar) startCal;
         curEvent.myEnd = (GregorianCalendar) endCal;
         return curEvent;
+    }
+
+
+    private GregorianCalendar allDayStart ()
+    {
+        GregorianCalendar myCal = new GregorianCalendar();
+        myCal.set(Calendar.HOUR_OF_DAY, 0);
+        myCal.set(Calendar.MINUTE, 0);
+        return myCal;
+    }
+
+
+    private GregorianCalendar allDayEnd ()
+    {
+        GregorianCalendar myCal = new GregorianCalendar();
+        myCal.set(Calendar.HOUR_OF_DAY, 23);
+        myCal.set(Calendar.MINUTE, 59);
+        return myCal;
     }
 
 
@@ -139,6 +149,39 @@ public class GoogleCalParser extends InputParser
         else if (month.equals("Oct")) return 10;
         else if (month.equals("Nov")) return 11;
         return 12;
+    }
+
+
+    private Calendar parseMyTime (Calendar myCal, String current, int base)
+    {
+        int myHour;
+        //if no colon
+        if (!current.contains(":"))
+        {
+
+            myHour =
+                Integer.parseInt(current.substring(0, current.length() - base));
+            myCal.set(Calendar.MINUTE, 0);
+        }
+        else
+        // if colon
+        {
+            myHour =
+                Integer.parseInt(current.substring(0, current.length() - base -
+                                                      3));
+            int myMin;
+            myMin =
+                Integer.parseInt(current.substring(current.length() - base - 2,
+                                                   current.length() - base));
+            myCal.set(Calendar.MINUTE, myMin);
+        }
+        //check if pm
+        if (current.substring(current.length() - base).startsWith("p"))
+        {
+            myHour += 12;
+        }
+        myCal.set(Calendar.HOUR_OF_DAY, myHour);
+        return myCal;
     }
 
 }

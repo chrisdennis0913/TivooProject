@@ -3,34 +3,38 @@ package processor;
 import input.Event;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
 
-public class NameSorter implements SorterInterface{
+public class NameSorter implements SearchInterface{
 
-	
-	boolean ascend; 
-	public NameSorter (boolean myAscend){
-		ascend = myAscend;
+
+	boolean ascOrDes; 
+
+	public NameSorter(boolean ascOrDes) {
+		this.ascOrDes = ascOrDes;
 	}
 
-	public List<Event> sorter (List<Event> myEvents) {
-		TreeMap<String, Event> nameSort = new TreeMap<String, Event>();
+	public List<Event> search (List<Event> myEvents) {
+
+		Event[] arrayEvents = myEvents.toArray(new Event[0]);
+
+		for (int i=0; i<=arrayEvents.length-1; i++){	
+			for (int j=i; j<=arrayEvents.length-1; j++){
+				if ( ((ascOrDes) && (arrayEvents[i].getSubject().compareTo(arrayEvents[j].getSubject())) > 0) ||
+				 ((!ascOrDes) && (arrayEvents[i].getSubject().compareTo(arrayEvents[j].getSubject())) < 0) )
+				{
+					Event temp = arrayEvents[i];
+					arrayEvents[i] = arrayEvents[j];
+					arrayEvents[j] = temp; 
+				}
+			}
+		}
 		
-			for (Event e: myEvents){	
-				nameSort.put(e.mySubject, e);
-			}
-	
-			ArrayList<Event> returnEvent = new ArrayList<Event> ();
-			
-			Set<String> detailkey = nameSort.keySet();
-			for (String s: detailkey){
-					returnEvent.add(nameSort.get(s));
-			}
-			
-			return returnEvent;
+		List<Event> returnEvent = new ArrayList<Event>(); 
+		for (int k=0; k<=arrayEvents.length-1; k++){
+			returnEvent.add(arrayEvents[k]);
+		}
+
+		return returnEvent;
 	}
 }

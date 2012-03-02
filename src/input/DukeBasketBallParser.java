@@ -1,10 +1,6 @@
 package input;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import org.w3c.dom.Node;
@@ -19,14 +15,12 @@ public class DukeBasketBallParser extends InputParser
     }
 
 
-    @SuppressWarnings("deprecation")
     public Event subParsing (Node node,
                              Event curEvent,
                              Calendar startCal,
                              Calendar endCal,
                              Map<String, String> bBallNodeMap)
     {
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         bBallNodeMap.put("Description", "Description");
         bBallNodeMap.put("Location", "Location");
         bBallNodeMap.put("Priority", "Priority");
@@ -42,51 +36,31 @@ public class DukeBasketBallParser extends InputParser
         if (nodeName.equals("Subject")) curEvent.mySubject = nodeText;
         else if (nodeName.equals("StartDate"))
         {
-            Date date = null;
-            try
-            {
-                date = df.parse(nodeText);
-            }
-            catch (ParseException e)
-            {
-                e.printStackTrace();
-            }
-            //startCal.setTime(date);
-            startCal.set(Calendar.DAY_OF_MONTH, date.getDate());
-            startCal.set(Calendar.MONTH, date.getMonth());
-            startCal.set(Calendar.YEAR, date.getYear());
+            int[] times = parseDates(nodeText, "/");
+            startCal.set(Calendar.DAY_OF_MONTH, times[1]);
+            startCal.set(Calendar.MONTH, times[0]);
+            startCal.set(Calendar.YEAR, times[2]);
         }
         else if (nodeName.equals("StartTime"))
         {
-            String[] hms = nodeText.split(":");
-            startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hms[0]));
-            startCal.set(Calendar.MINUTE, Integer.parseInt(hms[1]));
-            String[] secAM_PM = hms[2].split(" ");
-            startCal.set(Calendar.SECOND, Integer.parseInt(secAM_PM[0]));
+            int[] times = parseTimes(nodeText, ":");
+            startCal.set(Calendar.HOUR_OF_DAY, times[0]);
+            startCal.set(Calendar.MINUTE, times[1]);
+            startCal.set(Calendar.SECOND, times[2]);
         }
         else if (nodeName.equals("EndDate"))
         {
-            Date date = null;
-            try
-            {
-                date = df.parse(nodeText);
-            }
-            catch (ParseException e)
-            {
-                e.printStackTrace();
-            }
-            //endCal.setTime(date);
-            endCal.set(Calendar.DAY_OF_MONTH, date.getDate());
-            endCal.set(Calendar.MONTH, date.getMonth());
-            endCal.set(Calendar.YEAR, date.getYear());
+            int[] times = parseDates(nodeText, "/");
+            endCal.set(Calendar.DAY_OF_MONTH, times[1]);
+            endCal.set(Calendar.MONTH, times[0]);
+            endCal.set(Calendar.YEAR, times[2]);
         }
         else if (nodeName.equals("EndTime"))
         {
-            String[] hms = nodeText.split(":");
-            endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hms[0]));
-            endCal.set(Calendar.MINUTE, Integer.parseInt(hms[1]));
-            String[] secAM_PM = hms[2].split(" ");
-            endCal.set(Calendar.SECOND, Integer.parseInt(secAM_PM[0]));
+            int[] times = parseTimes(nodeText, ":");
+            endCal.set(Calendar.HOUR_OF_DAY, times[0]);
+            endCal.set(Calendar.MINUTE, times[1]);
+            endCal.set(Calendar.SECOND, times[2]);
         }
         else if (bBallNodeMap.containsKey(nodeName)) curEvent.detailMap.put(bBallNodeMap.get(nodeName),
                                                                             nodeText);
@@ -101,5 +75,30 @@ public class DukeBasketBallParser extends InputParser
 
         return curEvent;
 
+    }
+
+
+    private int[] parseDates (String myText, String myRegex)
+    {
+        String[] myStrArray = myText.split(myRegex);
+        int[] myIntArray = new int[myStrArray.length];
+        for (int n = 0; n < myStrArray.length; n++)
+        {
+            myIntArray[n] = Integer.parseInt(myStrArray[n]);
+        }
+        return myIntArray;
+    }
+
+
+    private int[] parseTimes (String myText, String myRegex)
+    {
+        String[] myStrArray = myText.split(myRegex);
+        int[] myIntArray = new int[myStrArray.length];
+        for (int n = 0; n < 2; n++)
+        {
+            myIntArray[n] = Integer.parseInt(myStrArray[n]);
+        }
+        myIntArray[2] = Integer.parseInt(myStrArray[2].substring(0, 2));
+        return myIntArray;
     }
 }
