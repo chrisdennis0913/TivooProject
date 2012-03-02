@@ -63,7 +63,7 @@ public abstract class InputParser
         public static InputParser generate (String filename)
         {
             if (filename.equals("DukeBasketBall.xml")) return new DukeBasketBallParser();
-            else if (filename.equals("NFL.xml")) return new XMLtvParser();
+            else if (filename.equals("NFL.xml")) return new NFLParser();
             else if (filename.equals("DukeClubsSample.xml")) return new DukeClubParser();
             else if (filename.equals("GoogleCalSample.xml")) return new GoogleCalParser();
             else return null;

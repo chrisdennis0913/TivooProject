@@ -1,3 +1,10 @@
 Needed to make a new repo, but it works!
 
 The entry point for the project is the Main class and the string that you input it the name of the XML file you want to use to generate the calendar.
+
+"DukeBasketBall.xml" 	DukeBasketBallParser
+"NFL.xml"		NFLParser
+"DukeClubsSample.xml"	DukeClubParser
+"GoogleCalSample.xml"	GoogleCalParser
+
+should all work. just one parser to go

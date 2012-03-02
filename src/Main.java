@@ -15,8 +15,9 @@ public class Main
         //get list of events
         InputParser input =
             InputParser.ParserFactory.generate("DukeBasketBall.xml");
-        InputParser inputB = InputParser.ParserFactory.generate("NFL.xml");
-        InputParser inputC =
+        InputParser inputC = InputParser.ParserFactory.generate("NFL.xml");
+        InputParser inputB = InputParser.ParserFactory.generate("GoogleCalSample.xml");
+        InputParser inputD =
             InputParser.ParserFactory.generate("DukeClubsSample.xml");
 
         List<Event> eventList = input.getListOfEvents();
@@ -45,7 +46,7 @@ public class Main
         o.dayWeekMonth(start, end);
         //o.sortedList();
         //o.conflictList();
-        //o.generateCalendar();
+        o.generateCalendar();
 
     }
 
