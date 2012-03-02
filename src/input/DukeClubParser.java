@@ -21,8 +21,6 @@ public class DukeClubParser extends InputParser
                              Calendar endCal,
                              Map<String, String> clubNodeMap)
     {
-
-        clubNodeMap.put("allday", "All Day?");
         clubNodeMap.put("description", "Description");
         clubNodeMap.put("link", "Link");
 
@@ -31,22 +29,9 @@ public class DukeClubParser extends InputParser
         String nodeText = node.getTextContent();
 
         if (nodeName.equals("summary")) curEvent.mySubject = nodeText;
-        else if (nodeName.equals("location"))
+        else if (nodeName.equals("address"))
         {
-            Stack<Node> locStack = new Stack<Node>();
-            NodeList locList = node.getChildNodes();
-            for (int i = 0; i < locList.getLength(); i++)
-            {
-                locStack.push(locList.item(i));
-            }
-            while (!locStack.isEmpty())
-            {
-                Node current = locStack.pop();
-                if (current.getNodeName().equals("address"))
-                {
-                    curEvent.detailMap.put("Location", current.getTextContent());
-                }
-            }
+            curEvent.detailMap.put("Location", nodeText);
             return curEvent;
         }
         else if (nodeName.equals("categories"))
@@ -72,34 +57,21 @@ public class DukeClubParser extends InputParser
             }
             return curEvent;
         }
-        // categories, category, split on "/" and take last value
         else if (nodeName.equals("start"))
         {
-            Stack<Node> startStack = new Stack<Node>();
             NodeList startList = node.getChildNodes();
             for (int i = 0; i < startList.getLength(); i++)
             {
-                startStack.push(startList.item(i));
-            }
-            while (!startStack.isEmpty())
-            {
-                Node current = startStack.pop();
-                curEvent = startParsing(current, curEvent, startCal);
+                curEvent.myStart=(GregorianCalendar) parseMyDate(startList.item(i),startCal);
             }
             return curEvent;
         }
         else if (nodeName.equals("end"))
         {
-            Stack<Node> endStack = new Stack<Node>();
             NodeList startList = node.getChildNodes();
             for (int i = 0; i < startList.getLength(); i++)
             {
-                endStack.push(startList.item(i));
-            }
-            while (!endStack.isEmpty())
-            {
-                Node current = endStack.pop();
-                curEvent = endParsing(current, curEvent, endCal);
+                curEvent.myEnd=(GregorianCalendar) parseMyDate(startList.item(i),endCal);
             }
             return curEvent;
         }
@@ -118,61 +90,31 @@ public class DukeClubParser extends InputParser
     }
 
 
-    private Event startParsing (Node current, Event curEvent, Calendar startCal)
+    private Calendar parseMyDate (Node current, Calendar myCal)
     {
         String nodeName = current.getNodeName();
         String nodeText = current.getTextContent();
         if (nodeName.equals("fourdigityear"))
         {
-            startCal.set(Calendar.YEAR, Integer.parseInt(nodeText));
+            myCal.set(Calendar.YEAR, Integer.parseInt(nodeText));
         }
         else if (nodeName.equals("twodigitmonth"))
         {
-            startCal.set(Calendar.MONTH, Integer.parseInt(nodeText));
+            myCal.set(Calendar.MONTH, Integer.parseInt(nodeText));
         }
         else if (nodeName.equals("twodigitday"))
         {
-            startCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(nodeText));
+            myCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(nodeText));
         }
         else if (nodeName.equals("twodigithour24"))
         {
-            startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(nodeText));
+            myCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(nodeText));
         }
         else if (nodeName.equals("twodigitminute"))
         {
-            startCal.set(Calendar.MINUTE, Integer.parseInt(nodeText));
+            myCal.set(Calendar.MINUTE, Integer.parseInt(nodeText));
         }
-        curEvent.myStart = (GregorianCalendar) startCal;
-        return curEvent;
-    }
-
-
-    private Event endParsing (Node current, Event curEvent, Calendar endCal)
-    {
-        String nodeName = current.getNodeName();
-        String nodeText = current.getTextContent();
-        if (nodeName.equals("fourdigityear"))
-        {
-            endCal.set(Calendar.YEAR, Integer.parseInt(nodeText));
-        }
-        else if (nodeName.equals("twodigitmonth"))
-        {
-            endCal.set(Calendar.MONTH, Integer.parseInt(nodeText));
-        }
-        else if (nodeName.equals("twodigitday"))
-        {
-            endCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(nodeText));
-        }
-        else if (nodeName.equals("twodigithour24"))
-        {
-            endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(nodeText));
-        }
-        else if (nodeName.equals("twodigitminute"))
-        {
-            endCal.set(Calendar.MINUTE, Integer.parseInt(nodeText));
-        }
-        curEvent.myEnd = (GregorianCalendar) endCal;
-        return curEvent;
+        return myCal;
     }
 
 }
