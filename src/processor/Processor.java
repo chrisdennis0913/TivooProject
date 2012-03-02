@@ -1,21 +1,54 @@
 package processor;
+import input.DukeBasketBallParser;
 import input.Event;
-import java.util.GregorianCalendar;
+import input.InputParser;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class Processor {
-	private FinderFactory factory = new FinderFactory(); 
-	private FinderInterface wordMethod, timeMethod;
+public class Processor {	
+	private List<SearchInterface> findMethod = new ArrayList<SearchInterface>();
+	private List<SearchInterface> sortMethod = new ArrayList<SearchInterface>();
+	private List<Event> events;
 	
-	public List<Event> findByKeyWord (List<Event> myEvents, String keyword){
-		wordMethod = factory.CreateKeyWordFinder(keyword); 
-		return wordMethod.finder(myEvents);
+	public Processor (List<Event> myEvents){
+		events = myEvents;
 	}
 	
-	public List<Event> findByTimeFrame (List<Event> myEvents, GregorianCalendar start, GregorianCalendar end){
-		timeMethod = factory.CreateTimeFrameFinder(start, end);
-		return timeMethod.finder(myEvents);  
+	public void addSorter (SearchInterface sort){
+		sortMethod.add(sort);
 	}
 	
+	public void addFinder (SearchInterface find){
+		findMethod.add(find);
+	}
+	
+	public List<Event> process (){
+		List<Event> tempEvents = events; 
+		for (SearchInterface f: findMethod){
+			tempEvents = f.search(tempEvents);
+		}	
+		for (SearchInterface s: sortMethod){
+			tempEvents = s.search(tempEvents);
+		}
+		return tempEvents;
+	}
+	
+	public static void main (String args[]){
+		InputParser par = new DukeBasketBallParser();
+
+		Processor process = new Processor (par.getListOfEvents());		
+		List <String> s = new ArrayList<String> ();
+		s.add("Boston"); s.add("Tennessee"); s.add("Michigan");
+		
+		process.addFinder(new KeyWordFinder (s, false));
+		process.addSorter(new NameSorter (true)); 
+		
+		List<Event> ev = process.process(); 
+		for (Event e: ev){
+			System.out.println (e.toString());
+		}
+		
+	}
 }
