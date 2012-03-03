@@ -16,17 +16,18 @@ public class Main
     {
         //get list of events
         InputParser input =      InputParser.ParserFactory.generate("DukeBasketBall.xml");
-      //  InputParser inputC = InputParser.ParserFactory.generate("NFL.xml");
-       // InputParser inputB = InputParser.ParserFactory.generate("GoogleCalSample.xml");
-        InputParser inputD =
-            InputParser.ParserFactory.generate("tv.xml");
+        InputParser inputC = InputParser.ParserFactory.generate("NFL.xml");
+        InputParser inputB = InputParser.ParserFactory.generate("GoogleCalSample.xml");
+        InputParser inputD = InputParser.ParserFactory.generate("tv.xml");
+        InputParser inputE = InputParser.ParserFactory.generate("DukeClubsSample.xml");
 
         List<Event> eventList = input.getListOfEvents();
-        //eventList.addAll(inputB.getListOfEvents());
-        //eventList.addAll(inputC.getListOfEvents());
+        eventList.addAll(inputB.getListOfEvents());
+        eventList.addAll(inputC.getListOfEvents());
         
         List<Event> xmlEventList = inputD.getListOfEvents();
         eventList.addAll(xmlEventList);
+        eventList.addAll(inputE.getListOfEvents());
         Collections.sort(eventList);
         Collections.sort(xmlEventList);
 
