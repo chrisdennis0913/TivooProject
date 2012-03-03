@@ -5,8 +5,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import output.GenerateCalendar;
-import output.Output;
-import processor.Processor;
+import output.*;
 
 
 public class Main
@@ -30,18 +29,14 @@ public class Main
         Collections.sort(eventList);
         Collections.sort(xmlEventList);
 
-        //processor
-
-        Processor process = new Processor(eventList);
-
 
         // -- not sure exactly how to call this right now but once processor is done should be easy
         //Sorting sort = new Sorting(eventList);
         //sort.sorting(EventList); 
 
         //output
-        int year = 2;
-        int month = 0;
+        int year = 2011;
+        int month = 9;
         int date = 1;
         GregorianCalendar start = new GregorianCalendar(year, month, date);
         int eYear = 2012;
@@ -50,10 +45,13 @@ public class Main
         GregorianCalendar end = new GregorianCalendar(eYear, eMonth, eDate);
 
         GenerateCalendar o = new GenerateCalendar(eventList);
-//        o.dayWeekMonth(start, end);
-        //o.sortedList();
-        //o.conflictList();
-        o.generate(start,end);
+        DayWeekMonth dwm = new DayWeekMonth(eventList);
+        SortedList s = new SortedList(eventList);
+        ConflictList c = new ConflictList(eventList);
+        dwm.generate(start, end);
+        s.generate(start,end);
+        c.generate(start,end);
+        o.generate(start, end);
 
     }
 

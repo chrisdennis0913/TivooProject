@@ -2,9 +2,6 @@ package output;
 
 import input.Event;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -19,13 +16,10 @@ public class GenerateCalendar extends Output{
 
 	public void generate(GregorianCalendar first, GregorianCalendar last)
 	{
-
+		
 		try
 		{
-			File file = new File("Calendar.html");
-			FileWriter fw = new FileWriter(file);
-			/* You can also give the path as C:\\Desktop\\fileWriter.txt */
-			br = new BufferedWriter(fw);
+			writer("Calendar.html");
 
 			br.write(Output.startCal());
 
@@ -52,9 +46,7 @@ public class GenerateCalendar extends Output{
 				//thisMonth.get(i).myStart.get(Calendar.MONTH)
 
 				//header tag
-				Tag header = new Tag("header");
-				header.addInnerHTML(Output.intToMonth(i));
-				br.write(header.getHTML());
+				br.write(header(Output.intToMonth(i)));
 
 				Tag table = new Tag("table","border",1);
 				Tag weeks = new Tag("tr");
@@ -114,8 +106,7 @@ public class GenerateCalendar extends Output{
 
 			}
 
-			br.write(Output.endCal());
-			br.close();
+			close();
 		}
 		catch (Exception e)
 		{

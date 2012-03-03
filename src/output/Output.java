@@ -8,7 +8,7 @@ import processor.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -17,11 +17,65 @@ import java.util.List;
 public abstract class Output 
 {
 	BufferedWriter br = null;
+	FileWriter fw = null;
+	boolean search = true;
+	boolean sort = false;
+	GregorianCalendar start;
+	GregorianCalendar end;
 	
 	List<Event> eventList;
 	public Output (List<Event> eventList)
 	{
 		this.eventList = eventList;
+	}
+	
+	public String header(String title)
+	{
+		Tag header = new Tag("header");
+		header.addInnerHTML(title);
+		return "<html> \n <body> \n\n\n" + header.getHTML();
+	}
+	
+	public void writer(String fileName) throws IOException
+	{
+		File file = new File(fileName);
+		fw = new FileWriter(file);
+		br = new BufferedWriter(fw);
+	}
+	
+	public void close() throws IOException
+	{
+		br.write(endCal());
+		br.close();
+	}
+	
+	public String rowCol(GregorianCalendar first,GregorianCalendar last, boolean searchOrSort)
+	{
+		Tag event = new Tag("tr","height",100);
+		List<Event> listFrame;
+		if(searchOrSort)
+		{
+			TimeFrameFinder day = new TimeFrameFinder(first,last, true);
+			listFrame = day.search(eventList);
+		}
+		else
+		{
+			StartTimeSorter day = new StartTimeSorter(true);
+			listFrame = day.search(eventList);
+		}
+		
+		for (Event d: listFrame)
+		{
+			Tag col = new Tag("td","width",250);
+
+			//String link = d.generateDetailsHTML();
+			String title = d.getSubject();
+			
+			//col.addInnerHTML("<a href=\""+link+"\">"+title+"</a> ");	
+			col.addInnerHTML(title);
+			event.addInnerHTML(col);
+		}
+		return event.getHTML();
 	}
 
 	public abstract void generate(GregorianCalendar first, GregorianCalendar last);

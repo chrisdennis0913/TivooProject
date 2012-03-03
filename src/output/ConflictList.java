@@ -2,13 +2,9 @@ package output;
 
 import input.Event;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import processor.TimeFrameFinder;
 
 public class ConflictList extends Output{
 	
@@ -19,51 +15,25 @@ public class ConflictList extends Output{
 
 	public void generate(GregorianCalendar first, GregorianCalendar last)
 	{
-		
-
 		try
 		{
 			// -- not sure exactly how to call this right now but once processor is done should be easy
 			//Sorting sort = new Sorting(eventList);
 			//sort.sorting(EventList); 
-			File file = new File("Conflicts.html");
-			FileWriter fw = new FileWriter(file);
-
-			br = new BufferedWriter(fw);
-
-			br.write(Output.startCal());
-
-			//header tag
-			Tag header = new Tag("header");
-			header.addInnerHTML("Conflicts list");
-			br.write(header.getHTML());
+			writer("Conflicts.html");
 			
+			br.write(header("Conflict List"));
 			
 			Tag table = new Tag("table","border",1);
 			for(Event e: eventList)
 			{ 
-				Tag event = new Tag("tr","height",100);
-				TimeFrameFinder day = new TimeFrameFinder(e.getStartDate(),e.getEndDate(), true);
-
-				List<Event> conflicts = day.search(eventList);
-				for (Event d: conflicts)
-				{
-					Tag col = new Tag("td","width",250);
-
-					String link = d.generateDetailsHTML();
-					String title = d.getSubject();
-					
-					col.addInnerHTML("<a href=\""+link+"\">"+title+"</a> ");	
-					event.addInnerHTML(col);
-				}
-				table.addInnerHTML(event);
-				
+				start = e.getStartDate();
+				end = e.getEndDate();
+				table.addInnerHTML(rowCol(start,end,search));
 			}
 
 			br.write(table.getHTML());
-
-			br.write(Output.endCal());
-			br.close();
+			close();
 		}
 		catch (Exception e)
 		{
