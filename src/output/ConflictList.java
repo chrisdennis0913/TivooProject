@@ -19,7 +19,7 @@ public class ConflictList extends Output{
 
 	public void generate(GregorianCalendar first, GregorianCalendar last)
 	{
-		BufferedWriter br = null;
+		
 
 		try
 		{
@@ -44,7 +44,7 @@ public class ConflictList extends Output{
 			{ 
 				Tag event = new Tag("tr","height",100);
 				TimeFrameFinder day = new TimeFrameFinder(e.getStartDate(),e.getEndDate(), true);
-//				List<Event> conflicts = day.finder(eventList);
+
 				List<Event> conflicts = day.search(eventList);
 				for (Event d: conflicts)
 				{

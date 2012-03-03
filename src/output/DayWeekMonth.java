@@ -20,7 +20,7 @@ public class DayWeekMonth extends Output{
 
 	public void generate(GregorianCalendar first, GregorianCalendar last)
 	{
-		BufferedWriter br = null;
+		
 
 		try
 		{
@@ -36,26 +36,26 @@ public class DayWeekMonth extends Output{
 			Tag header = new Tag("header");
 			header.addInnerHTML("Day Week or Month");
 			br.write(header.getHTML());
-			
-			
-			Tag table = new Tag("table","border",1);
-				Tag event = new Tag("tr","height",100);
-				TimeFrameFinder frame = new TimeFrameFinder(first,last, true);
-//				List<Event> window = frame.finder(eventList);
-				List<Event> window = frame.search(eventList);
-				for (Event d: window)
-				{
-					Tag col = new Tag("td","width",250);
 
-					String link = d.generateDetailsHTML();
-					String title = d.getSubject();
-					
-					col.addInnerHTML("<a href=\""+link+"\">"+title+"</a> ");	
-					event.addInnerHTML(col);
-				}
-				table.addInnerHTML(event);
-				
-			
+
+			Tag table = new Tag("table","border",1);
+			Tag event = new Tag("tr","height",100);
+			TimeFrameFinder frame = new TimeFrameFinder(first,last, true);
+
+			List<Event> window = frame.search(eventList);
+			for (Event d: window)
+			{
+				Tag col = new Tag("td","width",250);
+
+				String link = d.generateDetailsHTML();
+				String title = d.getSubject();
+
+				col.addInnerHTML("<a href=\""+link+"\">"+title+"</a> ");	
+				event.addInnerHTML(col);
+			}
+			table.addInnerHTML(event);
+
+
 
 			br.write(table.getHTML());
 

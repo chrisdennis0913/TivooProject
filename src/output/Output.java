@@ -16,7 +16,8 @@ import java.util.List;
 
 public abstract class Output 
 {
-
+	BufferedWriter br = null;
+	
 	List<Event> eventList;
 	public Output (List<Event> eventList)
 	{
@@ -24,6 +25,21 @@ public abstract class Output
 	}
 
 	public abstract void generate(GregorianCalendar first, GregorianCalendar last);
+	
+	public static List<Event> genList(List<Event> list, Tag eTag, Tag tTag)
+	{
+		for (Event d: list)
+		{
+			Tag col = new Tag("td","width",250);
+
+			String link = d.generateDetailsHTML();
+			String title = d.getSubject();
+			
+			col.addInnerHTML("<a href=\""+link+"\">"+title+"</a> ");	
+			eTag.addInnerHTML(col);
+		}
+		return list;
+	}
 	
 	public static String startCal()
 	{

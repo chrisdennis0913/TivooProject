@@ -19,7 +19,7 @@ public class SortedList extends Output{
 
 	public void generate(GregorianCalendar first, GregorianCalendar last)
 	{
-		BufferedWriter br = null;
+		
 
 		try
 		{
