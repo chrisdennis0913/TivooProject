@@ -100,7 +100,7 @@ public class DukeClubParser extends InputParser
         }
         else if (nodeName.equals("twodigitmonth"))
         {
-            myCal.set(Calendar.MONTH, Integer.parseInt(nodeText));
+            myCal.set(Calendar.MONTH, Integer.parseInt(nodeText)-1);
         }
         else if (nodeName.equals("twodigitday"))
         {

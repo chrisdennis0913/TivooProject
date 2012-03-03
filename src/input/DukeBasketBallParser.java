@@ -38,7 +38,7 @@ public class DukeBasketBallParser extends InputParser
         {
             int[] times = parseDates(nodeText, "/");
             startCal.set(Calendar.DAY_OF_MONTH, times[1]);
-            startCal.set(Calendar.MONTH, times[0]);
+            startCal.set(Calendar.MONTH, times[0]-1);
             startCal.set(Calendar.YEAR, times[2]);
         }
         else if (nodeName.equals("StartTime"))
@@ -52,7 +52,7 @@ public class DukeBasketBallParser extends InputParser
         {
             int[] times = parseDates(nodeText, "/");
             endCal.set(Calendar.DAY_OF_MONTH, times[1]);
-            endCal.set(Calendar.MONTH, times[0]);
+            endCal.set(Calendar.MONTH, times[0]-1);
             endCal.set(Calendar.YEAR, times[2]);
         }
         else if (nodeName.equals("EndTime"))

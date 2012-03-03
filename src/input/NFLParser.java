@@ -63,7 +63,7 @@ public class NFLParser extends InputParser
         String[] dateTime = myText.split("\\s+");
         String[] date = dateTime[0].split("-");
         myCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date[2]));
-        myCal.set(Calendar.MONTH, Integer.parseInt(date[1]));
+        myCal.set(Calendar.MONTH, Integer.parseInt(date[1])-1);
         myCal.set(Calendar.YEAR, Integer.parseInt(date[0]));
         String[] hms = dateTime[1].split(":");
         myCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hms[0]));

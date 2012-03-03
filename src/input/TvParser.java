@@ -72,14 +72,14 @@ public class TvParser extends InputParser{
 	            startCal.set(Calendar.MINUTE, Integer.parseInt(start.getNodeValue().substring(10, 12)));
 
 	            startCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(start.getNodeValue().substring(6, 8)));
-	            startCal.set(Calendar.MONTH, Integer.parseInt(start.getNodeValue().substring(4, 6)));
+	            startCal.set(Calendar.MONTH, Integer.parseInt(start.getNodeValue().substring(4, 6))-1);
 	            startCal.set(Calendar.YEAR, Integer.parseInt(start.getNodeValue().substring(0, 4)));
 	            
 	            endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(end.getNodeValue().substring(8, 10)));
 	            endCal.set(Calendar.MINUTE, Integer.parseInt(end.getNodeValue().substring(10, 12)));
 
 	            endCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(end.getNodeValue().substring(6, 8)));
-	            endCal.set(Calendar.MONTH, Integer.parseInt(end.getNodeValue().substring(4, 6)));
+	            endCal.set(Calendar.MONTH, Integer.parseInt(end.getNodeValue().substring(4, 6))-1);
 	            endCal.set(Calendar.YEAR, Integer.parseInt(end.getNodeValue().substring(0, 4)));
 	        	
 	        }
