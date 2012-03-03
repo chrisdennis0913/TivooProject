@@ -11,7 +11,7 @@ public class DukeBasketBallParser extends InputParser
 {
     public DukeBasketBallParser ()
     {
-        super("DukeBasketball.xml", "Calendar");
+        super("DukeBasketBall.xml", "Calendar");
     }
 
 

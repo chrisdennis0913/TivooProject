@@ -43,11 +43,8 @@ public abstract class InputParser
             NodeList nl = doc.getElementsByTagName(tagType);
             for (int i = 0; i < nl.getLength(); i++)
             {
-                if (tagType.equals("row")) EventList.add(parseEvent(nl.item(i)
-                                                                      .getFirstChild()
-                                                                      .getNextSibling()));
-                else if (tagType.equals("Calendar") ||
-                         tagType.equals("event") || tagType.equals("entry")) EventList.add(parseEvent(nl.item(i)));
+                if (tagType.equals("row")) EventList.add(parseEvent(nl.item(i).getFirstChild().getNextSibling()));
+                else if (tagType.equals("Calendar") || tagType.equals("event") || tagType.equals("entry") || tagType.equals("programme")) EventList.add(parseEvent(nl.item(i)));
             }
         }
         catch (Exception error)
@@ -65,6 +62,7 @@ public abstract class InputParser
             else if (filename.equals("NFL.xml")) return new NFLParser();
             else if (filename.equals("DukeClubsSample.xml")) return new DukeClubParser();
             else if (filename.equals("GoogleCalSample.xml")) return new GoogleCalParser();
+            else if (filename.equals("tv.xml")) return new TvParser();
             else return null;
         }
     }

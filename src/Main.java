@@ -13,21 +13,22 @@ public class Main
     public static void main (String[] args)
     {
         //get list of events
-        InputParser input =
-            InputParser.ParserFactory.generate("DukeBasketBall.xml");
-        InputParser inputC = InputParser.ParserFactory.generate("NFL.xml");
-        InputParser inputB = InputParser.ParserFactory.generate("GoogleCalSample.xml");
+        InputParser input =      InputParser.ParserFactory.generate("DukeBasketBall.xml");
+      //  InputParser inputC = InputParser.ParserFactory.generate("NFL.xml");
+       // InputParser inputB = InputParser.ParserFactory.generate("GoogleCalSample.xml");
         InputParser inputD =
-            InputParser.ParserFactory.generate("DukeClubsSample.xml");
+            InputParser.ParserFactory.generate("tv.xml");
 
         List<Event> eventList = input.getListOfEvents();
-        eventList.addAll(inputB.getListOfEvents());
-        eventList.addAll(inputC.getListOfEvents());
-        eventList.addAll(inputD.getListOfEvents());
+        //eventList.addAll(inputB.getListOfEvents());
+        //eventList.addAll(inputC.getListOfEvents());
+        
+        List<Event> xmlEventList = inputD.getListOfEvents();
+        eventList.addAll(xmlEventList);
         Collections.sort(eventList);
 
         //processor
-        Processor process = new Processor();
+        Processor process = new Processor(eventList);
 
         // -- not sure exactly how to call this right now but once processor is done should be easy
         //Sorting sort = new Sorting(eventList);
