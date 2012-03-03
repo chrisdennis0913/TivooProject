@@ -19,7 +19,6 @@ public class GenerateCalendar extends Output{
 
 	public void generate(GregorianCalendar first, GregorianCalendar last)
 	{
-		
 
 		try
 		{
@@ -64,7 +63,7 @@ public class GenerateCalendar extends Output{
 
 				int weekCount = 0;
 				int dayCount =0;
-				for(int j = 0;j<5;j++)
+				for(int j = 1;j<6;j++)
 				{
 					Tag row = new Tag("tr","height",100);
 					//determine how many to skip based off of day of week; possibly do another timeframefinder
