@@ -10,9 +10,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class generateCalendar extends Output{
+public class GenerateCalendar extends Output{
 	
-	public generateCalendar(List<Event> eventList) {
+	public GenerateCalendar(List<Event> eventList) {
 		super(eventList);
 		// TODO Auto-generated constructor stub
 	}

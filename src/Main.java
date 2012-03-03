@@ -3,6 +3,8 @@ import input.InputParser;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import output.GenerateCalendar;
 import output.Output;
 import processor.Processor;
 
@@ -13,21 +15,24 @@ public class Main
     public static void main (String[] args)
     {
         //get list of events
-        InputParser input =
-            InputParser.ParserFactory.generate("DukeBasketBall.xml");
-        InputParser inputC = InputParser.ParserFactory.generate("NFL.xml");
-        InputParser inputB = InputParser.ParserFactory.generate("GoogleCalSample.xml");
+        InputParser input =      InputParser.ParserFactory.generate("DukeBasketBall.xml");
+      //  InputParser inputC = InputParser.ParserFactory.generate("NFL.xml");
+       // InputParser inputB = InputParser.ParserFactory.generate("GoogleCalSample.xml");
         InputParser inputD =
-            InputParser.ParserFactory.generate("DukeClubsSample.xml");
+            InputParser.ParserFactory.generate("tv.xml");
 
         List<Event> eventList = input.getListOfEvents();
-        eventList.addAll(inputB.getListOfEvents());
-        eventList.addAll(inputC.getListOfEvents());
-        eventList.addAll(inputD.getListOfEvents());
+        //eventList.addAll(inputB.getListOfEvents());
+        //eventList.addAll(inputC.getListOfEvents());
+        
+        List<Event> xmlEventList = inputD.getListOfEvents();
+        eventList.addAll(xmlEventList);
         Collections.sort(eventList);
 
         //processor
-        
+
+        Processor process = new Processor(eventList);
+
 
         // -- not sure exactly how to call this right now but once processor is done should be easy
         //Sorting sort = new Sorting(eventList);
@@ -43,11 +48,11 @@ public class Main
         int eDate = 30;
         GregorianCalendar end = new GregorianCalendar(eYear, eMonth, eDate);
 
-        Output o = new Output(eventList);
+        GenerateCalendar o = new GenerateCalendar(eventList);
 //        o.dayWeekMonth(start, end);
         //o.sortedList();
         //o.conflictList();
-        o.generateCalendar();
+        o.generate(start,end);
 
     }
 

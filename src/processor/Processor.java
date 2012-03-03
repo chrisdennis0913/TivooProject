@@ -8,8 +8,7 @@ import java.util.List;
 
 
 public class Processor {	
-	private List<SearchInterface> findMethod = new ArrayList<SearchInterface>();
-	private List<SearchInterface> sortMethod = new ArrayList<SearchInterface>();
+	private List<SearchInterface> searchMethod = new ArrayList<SearchInterface>();
 	private List<Event> events;
 
 	public Processor (List<Event> myEvents){
@@ -17,19 +16,19 @@ public class Processor {
 	}
 
 	public void addSorter (SearchInterface sort){
-		sortMethod.add(sort);
+		searchMethod.add(sort);
 	}
 
 	public void addFinder (SearchInterface find){
-		findMethod.add(find);
+		searchMethod.add(find);
 	}
 
 	public List<Event> process (){
 		List<Event> tempEvents = events; 
-		for (SearchInterface f: findMethod){
+		for (SearchInterface f: searchMethod){
 			tempEvents = f.search(tempEvents);
 		}	
-		for (SearchInterface s: sortMethod){
+		for (SearchInterface s: searchMethod){
 			tempEvents = s.search(tempEvents);
 		}
 		return tempEvents;
@@ -40,11 +39,15 @@ public class Processor {
 
 		Processor process = new Processor (par.getListOfEvents());		
 		List <String> s = new ArrayList<String> ();
-		s.add("Boston"); s.add("Tennessee"); s.add("Michigan");
 
-		process.addFinder(new KeyWordFinder (s, false));
-		process.addSorter(new NameSorter (true)); 
-
+		s.add("Tennessee"); s.add("Michigan");
+		List<String> s2 = new ArrayList<String> ();
+		s2.add("Western"); 
+		
+		process.addFinder(new KeyWordFinder (s, false)); //Include or exclude part
+		process.addFinder (new KeyWordFinder (s2, false));//This is the "And" part
+		process.addSorter(new NameSorter (false)); //This changes the ascending or descending part
+		
 		List<Event> ev = process.process(); 
 		for (Event e: ev){
 			System.out.println (e.toString());
