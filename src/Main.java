@@ -28,6 +28,7 @@ public class Main
         List<Event> xmlEventList = inputD.getListOfEvents();
         eventList.addAll(xmlEventList);
         Collections.sort(eventList);
+        Collections.sort(xmlEventList);
 
         //processor
 
