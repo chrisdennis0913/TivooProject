@@ -57,22 +57,16 @@ public class DukeClubParser extends InputParser
             }
             return curEvent;
         }
-        else if (nodeName.equals("start"))
+        else if (nodeName.equals("start") || nodeName.equals("end"))
         {
             NodeList startList = node.getChildNodes();
+            GregorianCalendar tempCal = new GregorianCalendar();
             for (int i = 0; i < startList.getLength(); i++)
             {
-                curEvent.myStart=(GregorianCalendar) parseMyDate(startList.item(i),startCal);
+               tempCal =(GregorianCalendar) parseMyDate(startList.item(i),startCal);
             }
-            return curEvent;
-        }
-        else if (nodeName.equals("end"))
-        {
-            NodeList startList = node.getChildNodes();
-            for (int i = 0; i < startList.getLength(); i++)
-            {
-                curEvent.myEnd=(GregorianCalendar) parseMyDate(startList.item(i),endCal);
-            }
+            if(nodeName.equals("start")) curEvent.myStart = tempCal;
+            else if (nodeName.equals("end")) curEvent.myEnd = tempCal;
             return curEvent;
         }
         else if (clubNodeMap.containsKey(nodeName)) curEvent.detailMap.put(clubNodeMap.get(nodeName),
@@ -100,7 +94,7 @@ public class DukeClubParser extends InputParser
         }
         else if (nodeName.equals("twodigitmonth"))
         {
-            myCal.set(Calendar.MONTH, Integer.parseInt(nodeText));
+            myCal.set(Calendar.MONTH, Integer.parseInt(nodeText)-1);
         }
         else if (nodeName.equals("twodigitday"))
         {
