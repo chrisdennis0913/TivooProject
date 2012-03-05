@@ -11,7 +11,7 @@ public class SortedList extends Output{
 	
 	public SortedList(List<Event> eventList) {
 		super(eventList);
-		// TODO Auto-generated constructor stub
+		myUrl="SortedList.html";
 	}
 
 	
@@ -25,7 +25,7 @@ public class SortedList extends Output{
 			//Sorting sort = new Sorting(eventList);
 			//sort.sorting(EventList); 
 			
-			writer("Sorted List.html");
+			writer("SortedList.html");
 
 			br.write(header("Sorted Event List"));
 			

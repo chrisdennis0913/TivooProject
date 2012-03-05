@@ -12,6 +12,7 @@ public class DayWeekMonth extends Output{
 	public DayWeekMonth(List<Event> eventList) {
 		super(eventList);
 		// TODO Auto-generated constructor stub
+		myUrl="TimeFrame.html";
 	}
 
 	public void generate(GregorianCalendar first, GregorianCalendar last)

@@ -11,6 +11,7 @@ public class ConflictList extends Output{
 	public ConflictList(List<Event> eventList) {
 		super(eventList);
 		// TODO Auto-generated constructor stub
+		myUrl="Conflicts.html";
 	}
 
 	public void generate(GregorianCalendar first, GregorianCalendar last)

@@ -16,6 +16,7 @@ import java.util.List;
 
 public abstract class Output 
 {
+    protected String myUrl;
 	BufferedWriter br = null;
 	FileWriter fw = null;
 	boolean search = true;

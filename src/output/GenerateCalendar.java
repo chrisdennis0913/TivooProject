@@ -11,7 +11,7 @@ public class GenerateCalendar extends Output{
 	
 	public GenerateCalendar(List<Event> eventList) {
 		super(eventList);
-		// TODO Auto-generated constructor stub
+		myUrl="Calendar.html";
 	}
 
 	public void generate(GregorianCalendar first, GregorianCalendar last)
@@ -26,7 +26,6 @@ public class GenerateCalendar extends Output{
 			//find number of months in xml file
 			int numMonths = 12;
 			eventList.get(0).myStart.get(Calendar.MONTH);
-
 
 			for(int i=0;i<numMonths;i++)
 			{
